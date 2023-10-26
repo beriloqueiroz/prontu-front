@@ -6,6 +6,4 @@
 	<meta name="description" content="app" />
 </svelte:head>
 
-<section>
-	<h1>Bem vindo</h1>
-</section>
+<section />

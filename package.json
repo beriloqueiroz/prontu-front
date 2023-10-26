@@ -1,16 +1,6 @@
 {
   "name": "prontu-front",
   "version": "0.0.1",
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "test": "vitest",
-    "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write ."
-  },
   "devDependencies": {
     "@fontsource/fira-mono": "^4.5.10",
     "@neoconfetti/svelte": "^1.0.0",
@@ -23,6 +13,8 @@
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte": "^2.30.0",
+    "flowbite": "^2.0.0",
+    "flowbite-svelte": "^0.44.18",
     "postcss": "^8.4.31",
     "prettier": "^2.8.0",
     "prettier-plugin-svelte": "^2.10.1",
@@ -35,5 +27,18 @@
     "vite": "^4.4.2",
     "vitest": "^0.34.0"
   },
-  "type": "module"
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "vitest",
+    "lint": "prettier --plugin-search-dir . --check . && eslint .",
+    "format": "prettier --plugin-search-dir . --write ."
+  },
+  "type": "module",
+  "dependencies": {
+    "svelte-input-mask": "^1.1.0"
+  }
 }

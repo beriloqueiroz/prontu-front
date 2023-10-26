@@ -1,16 +1,15 @@
 <script>
-	import Header from './Header.svelte';
+	import Footer from '../components/Footer.svelte';
+	import Header from '../components/Header.svelte';
 	import '../main.css';
 </script>
 
 <div class="app p-0 flex flex-col h-screen justify-between">
 	<Header />
 
-	<main class="text-center mb-auto w-100 mt-3">
+	<main class="mb-auto w-100 mt-3 p-2">
 		<slot />
 	</main>
 
-	<footer class="w-100 bg-black text-white flex justify-center p-2 w-100">
-		<p>Paciente paciente</p>
-	</footer>
+	<Footer />
 </div>

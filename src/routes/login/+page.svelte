@@ -1,21 +1,15 @@
 <script>
-	import Input from '../../components/Input.svelte';
+	import { Input, Label, Button } from 'flowbite-svelte';
 </script>
 
-<svelte:head>
-	<title>entrar</title>
-	<meta name="description" content="Entrar" />
-</svelte:head>
-
-<form action="/api/login" method="post">
-	<div class="">
-		<Input id="login" label="E-mail" name="email" placeholder="fulano@gmail.com" />
-		<div class="">
-			<label for="password" class="">Senha</label>
-			<input id="password" name="password" type="password" class="" placeholder="Password" />
-		</div>
-		<div class="">
-			<button class="">Entrar</button>
-		</div>
+<form>
+	<div class="mb-6">
+		<Label for="email" class="mb-2">E-mail</Label>
+		<Input type="email" id="email" placeholder="john.doe@company.com" required />
 	</div>
+	<div class="mb-6">
+		<Label for="password" class="mb-2">Senha</Label>
+		<Input type="password" id="password" placeholder="•••••••••" required />
+	</div>
+	<Button type="submit">Entrar</Button>
 </form>
