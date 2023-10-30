@@ -11,7 +11,6 @@
 	<NavHamburger />
 	<NavUl>
 		<NavLi href="/">Inicio</NavLi>
-		<NavLi href="/about">Sobre nós</NavLi>
 		<NavLi href="/login">Entrar</NavLi>
 		<NavLi href="/register">Cadastrar-se</NavLi>
 	</NavUl>

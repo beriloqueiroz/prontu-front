@@ -13,7 +13,7 @@
 
 	function submit(event: SubmitEvent) {
 		event.preventDefault();
-		console.log('aisndasdam', event.target, institution_selected);
+		//TODO fazer chamada de api para cadastro
 	}
 </script>
 

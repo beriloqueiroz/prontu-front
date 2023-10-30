@@ -3,10 +3,13 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			user: any,
+		}
 		// interface PageData {}
 		// interface Platform {}
 	}
 }
 
-export {};
+export { };
