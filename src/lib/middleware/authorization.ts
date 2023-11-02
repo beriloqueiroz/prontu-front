@@ -13,6 +13,7 @@ export const authorizationMiddleware: Handle = async ({ event, resolve }): Promi
         const tokenValid = await IsValidToken(token);
 
         if (!tokenValid) {
+            event.cookies.delete('AuthorizationToken');
             throw redirect(301, "/login");
         }
     }

@@ -1,16 +1,6 @@
 import { redirect, type Actions, error } from '@sveltejs/kit';
 import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
 
-
-/** @type {import('./$types').PageServerLoad} */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function load({ url }: any) {
-  const registerIsSuccess = url.searchParams.get('register');
-  if (registerIsSuccess === 'success') {
-    console.log("sucesso ao registrar");
-  }
-}
-
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
   register: async ({ request }) => {
