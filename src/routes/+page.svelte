@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Professional } from '$lib/interface/professional';
 	import { user } from '$lib/stores/user';
+	import Spinner from '../components/Spinner.svelte';
 	$: id = $user?.username;
 	async function captureProfessional(id: string | undefined): Promise<Professional | undefined> {
 		if (!id) return;
@@ -16,7 +17,7 @@
 
 <section>
 	{#await captureProfessional(id)}
-		<div>loading</div>
+		<Spinner />
 	{:then professional}
 		<div>
 			{professional?.email}

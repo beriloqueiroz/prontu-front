@@ -2,6 +2,8 @@
 	import { Input, Label, Button, Checkbox, A, Select } from 'flowbite-svelte';
 	import InputMask from '../../components/InputMask.svelte';
 	import { applyAction, enhance } from '$app/forms';
+	import ErrorMessage from '../../components/ErrorMessage.svelte';
+	import Spinner from '../../components/Spinner.svelte';
 
 	let institution_selected: string;
 
@@ -12,13 +14,19 @@
 		{ value: 'oab', name: 'OAB' }
 	];
 
+	let error: string | null = null;
+	let loading = false;
+
 	async function handleRegister() {
+		loading = true;
 		return async ({ result }: any) => {
-			try {
-				await applyAction(result);
-			} catch (error) {
-				console.log(error);
+			if (result.type === 'error') {
+				error = result.error.message;
+				loading = false;
+				return;
 			}
+			loading = false;
+			await applyAction(result);
 		};
 	}
 </script>
@@ -91,5 +99,12 @@
 			>termos e condições</A
 		>.
 	</Checkbox>
-	<Button type="submit">Cadastrar-se</Button>
+	<Button type="submit">
+		{#if loading}
+			<Spinner class="my-1 mx-3" size="3" color="white" />
+		{:else}
+			Cadastrar-se
+		{/if}
+	</Button>
+	<ErrorMessage show={!!error} message={error} />
 </form>
