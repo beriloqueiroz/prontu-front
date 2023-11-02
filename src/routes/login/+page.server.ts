@@ -1,40 +1,47 @@
-import { fail, redirect } from '@sveltejs/kit';
-import { apiAuth } from '../../helpers/api-client.js';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { user } from '$lib/stores/user';
+import { decodeToken } from '$lib/helper';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
 
-  const token = cookies.get("AuthorizationToken");
+  const authToken = cookies.get("AuthorizationToken");
 
-  if (token && token != '') {
-    const res = await apiAuth.get('/User/authorization', { headers: { Authorization: token } });
-    if (res.status === 200)
-      throw redirect(302, '/');
-  }
+  if (!authToken || authToken != '') return { clearUser: true }
+  return { clearUser: false }
+
 }
 
 /** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
   login: async ({ request, cookies }) => {
     const data = await request.formData();
     const email = String(data.get('email'));
     const password = String(data.get('password'));
 
-    const res = await apiAuth.post('/User/login/email', { email, password });
+    const res = await fetch('/User/login/email', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
 
-    if (res.status !== 201 && res.status !== 200) {
-      return fail(400, { errors: res.data });
+    if (!res.ok) {
+      return fail(400, { errors: res.text() });
     }
-
+    const token = await res.text();
     const maxDays = 30;
 
-    cookies.set('AuthorizationToken', `Bearer ${res.data}`, {
+    cookies.set('AuthorizationToken', token, {
       httpOnly: true,
       path: '/',
       secure: true,
       sameSite: 'strict',
       maxAge: maxDays * 60 * 60 * 24
     });
+
+    user.set(decodeToken(token));
 
     throw redirect(303, '/');
   }

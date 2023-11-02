@@ -1,4 +1,12 @@
-<script>
+<script lang="ts">
+	import type { Professional } from '$lib/interface/professional';
+	import { user } from '$lib/stores/user';
+	$: id = $user?.username;
+	async function captureProfessional(id: string | undefined): Promise<Professional | undefined> {
+		if (!id) return;
+		const response = await fetch(`/api/professional?id=${id}`);
+		return response.json();
+	}
 </script>
 
 <svelte:head>
@@ -6,4 +14,16 @@
 	<meta name="description" content="app" />
 </svelte:head>
 
-<section />
+<section>
+	{#await captureProfessional(id)}
+		<div>loading</div>
+	{:then professional}
+		<div>
+			{professional?.email}
+		</div>
+	{:catch error}
+		<div>
+			{error}
+		</div>
+	{/await}
+</section>

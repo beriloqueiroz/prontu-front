@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { Input, Label, Button } from 'flowbite-svelte';
+	import { Input, Label, Button, A } from 'flowbite-svelte';
 	async function handleLogin() {
 		return async ({ result }: any) => {
 			await applyAction(result);
@@ -17,5 +17,8 @@
 		<Label for="password" class="mb-2">Senha</Label>
 		<Input type="password" id="password" placeholder="•••••••••" required name="password" />
 	</div>
-	<Button type="submit">Entrar</Button>
+	<div class="flex gap-3">
+		<Button type="submit">Entrar</Button>
+		<A href="/register">Cadastrar-se</A>
+	</div>
 </form>
