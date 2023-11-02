@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { Input, Label, Button, A } from 'flowbite-svelte';
+	import ErrorMessage from '../../components/ErrorMessage.svelte';
+	let error: string | null = null;
 	async function handleLogin() {
 		return async ({ result }: any) => {
+			if (result.type === 'error') {
+				error = result.error.message;
+				return;
+			}
 			await applyAction(result);
 		};
 	}
@@ -21,4 +27,5 @@
 		<Button type="submit">Entrar</Button>
 		<A href="/register">Cadastrar-se</A>
 	</div>
+	<ErrorMessage show={!!error} message={error} />
 </form>

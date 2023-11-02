@@ -13,7 +13,12 @@ export async function load({ cookies }) {
 
 }
 
-/** @type {import('./$types').Actions} */
+function parseLoginError(code: number): string {
+  if (code === 401) return "Usuário ou senha inválidos!";
+  if (code === 403) return "Confirme primeiramente seu e-mail";
+  return "Erro interno!";
+}
+
 export const actions: Actions = {
   login: async ({ request, cookies }) => {
     const data = await request.formData();
@@ -31,11 +36,9 @@ export const actions: Actions = {
     });
 
     if (!response.ok) {
-      const errors = await response.text();
-      throw error(response.status, {
-        message: errors
-      });
+      throw error(response.status, parseLoginError(response.status));
     }
+
     const token = await response.text();
     const maxDays = 30;
 

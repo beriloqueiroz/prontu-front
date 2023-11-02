@@ -1,4 +1,4 @@
-import { error, type Handle } from "@sveltejs/kit";
+import { redirect, type Handle } from "@sveltejs/kit";
 import { decodeToken } from "$lib/helper";
 import { URL_BASE_AUTH } from '$env/static/private';
 
@@ -13,16 +13,14 @@ export const authorizationMiddleware: Handle = async ({ event, resolve }): Promi
         const tokenValid = await IsValidToken(token);
 
         if (!tokenValid) {
-            throw error(401, {
-                message: 'Not authorized'
-            });
+            throw redirect(301, "/login");
         }
     }
 
     return await resolve(event);
 }
 
-export async function IsValidToken(authToken: string): Promise<boolean> {
+async function IsValidToken(authToken: string): Promise<boolean> {
     const claims = decodeToken(authToken);
     if (!claims) return false;
     const authorizationResponse = await fetch(`${URL_BASE_AUTH}/User/authorization`, {
