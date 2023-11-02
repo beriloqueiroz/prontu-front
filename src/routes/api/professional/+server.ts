@@ -1,13 +1,19 @@
-import type { RequestHandler } from "@sveltejs/kit";
+import { error, type RequestHandler } from "@sveltejs/kit";
+import { URL_BASE_BACKEND } from '$env/static/private';
+
 
 export const GET: RequestHandler = async ({ url }): Promise<Response> => {
     const id = url.searchParams.get("id");
-    const response: Response = await fetch(`http://localhost:5100/api/professional/${id}`, {
-        method: 'GET'
+    const response: Response = await fetch(`${URL_BASE_BACKEND}/professional/${id}`, {
+        method: 'GET',
+        headers: {
+            "content-type": "application/json"
+        }
     });
-    if (response.status === 200) {
-        return response;
-    } else {
-        return new Response("Internal server error", { status: 500 });
+    if (!response.ok) {
+        throw error(response.status, {
+            message: response.statusText
+        });
     }
+    return response;
 }

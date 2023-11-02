@@ -1,6 +1,7 @@
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { redirect, type Actions, error } from '@sveltejs/kit';
 import { user } from '$lib/stores/user';
 import { decodeToken } from '$lib/helper';
+import { URL_BASE_AUTH } from '$env/static/private';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
@@ -19,18 +20,23 @@ export const actions: Actions = {
     const email = String(data.get('email'));
     const password = String(data.get('password'));
 
-    const res = await fetch('/User/login/email', {
+    const response = await fetch(`${URL_BASE_AUTH}/User/login/email`, {
       method: 'POST',
+      headers: {
+        "content-type": "application/json"
+      },
       body: JSON.stringify({
-        email,
-        password
+        email, password
       })
     });
 
-    if (!res.ok) {
-      return fail(400, { errors: res.text() });
+    if (!response.ok) {
+      const errors = await response.text();
+      throw error(response.status, {
+        message: errors
+      });
     }
-    const token = await res.text();
+    const token = await response.text();
     const maxDays = 30;
 
     cookies.set('AuthorizationToken', token, {

@@ -14,6 +14,13 @@ declare global {
 	}
 }
 
+declare module "bun" {
+	interface Env {
+		URL_BASE_BACKEND: string;
+		URL_BASE_AUTH: string;
+	}
+}
+
 export { };
 
 export type PageServerLoad = Kit.ServerLoad<RouteParams>;
