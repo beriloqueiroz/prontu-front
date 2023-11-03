@@ -1,38 +1,19 @@
-# create-svelte
+# Prontu Front
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+- feito com bunjs (concorrente do nodejs) + svelte (concorrente do react), decisão com grande probabilidade de ser a errada, mas dev é bixo doido.
 
-## Creating a project
+## Para rodar
 
-If you're seeing this, you've probably already done this step. Congrats!
+- bun run dev
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## resuminho do svelte e o projeto
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- Ao carregar a home é executado o hook.server.ts (lá ficam as middlewares, uso pra autorização por exemplo.)
+- Depois é executado o +layout.server.ts que basicamente faz o SSR do componente layout da aplicação, nesse caso de toda a aplicação. E este ao retornar informação, passa essa informação para função load do +layout.ts que por sua vez trata e repassa para o componente +layout.
+- Depois é executado o load do +layout.ts
+- Depois o layout é renderizado, bem como os componentes do "slot"
 
-## Developing
+### detalhes do projeto
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- ao fazer login o usuário é direcionado para home, lá é feita uma requisição para o back do front (bunjs), usando o username do usuário para buscar os dados do profissional. Todos os endpoints do back do front deverão estar em routes/internal/*. Esta requisição faz de fato a chamada para o backend, agora do lado do servidor.
+- As chamadas do lado do servidor do front também são feitas nos arquivos +page.serve.ts, por exemplo na página de login.
