@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Input, Label, Button, Checkbox, A, Select } from 'flowbite-svelte';
-	import InputMask from '../../components/InputMask.svelte';
 	import { applyAction, enhance } from '$app/forms';
-	import ErrorMessage from '../../components/ErrorMessage.svelte';
-	import Spinner from '../../components/Spinner.svelte';
+	import InputMask from '$lib/components/InputMask.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
+	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
 	let institution_selected: string;
 

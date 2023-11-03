@@ -1,11 +1,13 @@
 <script lang="ts">
-	import type { Professional } from '$lib/interface/professional';
+	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
+	import type { Professional } from '$lib/interface/professional/professional';
 	import { user } from '$lib/stores/user';
-	import Spinner from '../components/Spinner.svelte';
 	async function captureProfessional(id: string | undefined): Promise<Professional | undefined> {
-		if (!id) return;
-		console.log('🚀 ~ file: +page.svelte:7 ~ captureProfessional ~ id:', id);
-		const response = await fetch(`/api/professional?id=${id}`);
+		if (!id) return undefined;
+		const response = await fetch(
+			`${location.protocol}//${location.host}/internal/professional?id=${id}`
+		);
 		return response.json();
 	}
 </script>
@@ -24,7 +26,7 @@
 		</div>
 	{:catch error}
 		<div>
-			{error}
+			<ErrorMessage message={error} show={error} />
 		</div>
 	{/await}
 </section>

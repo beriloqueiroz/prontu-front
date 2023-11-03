@@ -6,5 +6,5 @@ export interface Professional {
   document: string,
   professionalDocument: string,
   email: string,
-  patients: Patient
+  patients: Patient[]
 } 

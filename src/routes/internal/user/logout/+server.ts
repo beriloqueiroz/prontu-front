@@ -9,7 +9,6 @@ export const DELETE: RequestHandler = async ({ cookies }): Promise<Response> => 
             "Authorization": `Bearer ${cookies.get("AuthorizationToken")}`
         }
     });
-    console.log('logout server');
 
     if (!response.ok) {
         throw error(response.status, {

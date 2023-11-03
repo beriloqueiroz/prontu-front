@@ -3,8 +3,7 @@ import { decodeToken } from "$lib/server/helper";
 import { URL_BASE_AUTH } from '$env/static/private';
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
-    // Authorized only path
-    if (event.url.pathname.startsWith('/api/professional')) {
+    if (event.url.pathname.startsWith('/internal/professional')) {
         const token = event.cookies.get("AuthorizationToken");
         if (!token) {
             return new Response(null, { status: 401 });
@@ -16,6 +15,8 @@ export const authorizationMiddleware: Handle = async ({ event, resolve }): Promi
             event.cookies.delete('AuthorizationToken');
             throw redirect(301, "/login");
         }
+
+        event.locals.user = decodeToken(token);
     }
 
     return await resolve(event);

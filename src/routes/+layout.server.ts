@@ -17,14 +17,13 @@ export async function load({ cookies, url, locals }: PageServerLoad) {
     user = decodeToken(token);
   } catch (error) {
     cookies.delete("AuthorizationToken");
-    locals.username = '';
+    locals.user = null;
     return {};
   }
 
   if (token && !url.pathname.includes('/login') &&
     !url.pathname.includes('/register')) {
-    user.isLogged = true;
-    locals.username = user.username;
+    locals.user = user;
     return { user };
   }
 

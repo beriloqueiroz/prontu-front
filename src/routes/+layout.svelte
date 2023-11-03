@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Footer from '../components/Footer.svelte';
-	import Header from '../components/Header.svelte';
 	import '../main.css';
 
 	import { user } from '$lib/stores/user';
-	import type { User } from '$lib/interface/user';
+	import type { User } from '$lib/interface/user/user';
+	import Header from '$lib/components/Header.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	export let data: { user: User };
 	$: user.set(data.user);
 </script>

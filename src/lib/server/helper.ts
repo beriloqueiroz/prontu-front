@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import type { User } from "$lib/interface/user";
 import { redirect } from '@sveltejs/kit';
+import type { User } from '$lib/interface/user/user';
 
 export function decodeToken(token: string): User {
   try {

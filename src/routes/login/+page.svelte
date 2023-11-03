@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
 	import { Input, Label, Button, A } from 'flowbite-svelte';
-	import ErrorMessage from '../../components/ErrorMessage.svelte';
-	import Spinner from '../../components/Spinner.svelte';
 	let error: string | null = null;
 	let loading = false;
 	async function handleLogin() {

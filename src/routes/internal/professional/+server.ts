@@ -7,7 +7,8 @@ export const GET: RequestHandler = async ({ url }): Promise<Response> => {
     const response: Response = await fetch(`${URL_BASE_BACKEND}/professional/${id}`, {
         method: 'GET',
         headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "accept": "application/json",
         }
     });
     if (!response.ok) {
@@ -15,5 +16,5 @@ export const GET: RequestHandler = async ({ url }): Promise<Response> => {
             message: response.statusText
         });
     }
-    return response;
+    return new Response(await response.text());
 }
