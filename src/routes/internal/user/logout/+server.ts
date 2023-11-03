@@ -15,6 +15,13 @@ export const DELETE: RequestHandler = async ({ cookies }): Promise<Response> => 
             message: response.statusText
         });
     }
-    cookies.delete("AuthorizationToken");
-    return response;
+    cookies.delete("AuthorizationToken");//esse não funciona
+    cookies.set('AuthorizationToken', '', {
+        httpOnly: true,
+        path: '/',
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 0
+    });
+    return new Response(await response.text());
 }

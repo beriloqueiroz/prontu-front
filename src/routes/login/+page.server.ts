@@ -1,14 +1,5 @@
 import { redirect, type Actions, error } from '@sveltejs/kit';
 import { URL_BASE_AUTH } from '$env/static/private';
-// import type { PageServerLoad } from './$types';
-
-// export async function load({ cookies }: PageServerLoad) {
-//   const authToken = cookies.get("AuthorizationToken");
-
-//   if (!authToken || authToken != '') return { clearUser: true }
-//   return { clearUser: false }
-
-// }
 
 function parseLoginError(code: number): string {
   if (code === 401) return "Usuário ou senha inválidos!";

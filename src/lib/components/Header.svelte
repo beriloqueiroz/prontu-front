@@ -3,7 +3,7 @@
 	import { redirect } from '@sveltejs/kit';
 	import { NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	async function logout(): Promise<void> {
-		await fetch(`/api/user/logout`, {
+		await fetch(`/internal/user/logout`, {
 			method: 'DELETE'
 		});
 		user.set(null);
@@ -16,7 +16,7 @@
 	<NavHamburger />
 	<NavUl>
 		<NavLi href="/">Inicio</NavLi>
-		{#if $user && $user.isLogged}
+		{#if $user}
 			<NavLi on:click={logout}>Sair</NavLi>
 		{:else}
 			<NavLi href="/login">Entrar</NavLi>
