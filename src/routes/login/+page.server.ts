@@ -1,6 +1,4 @@
 import { redirect, type Actions, error } from '@sveltejs/kit';
-import { user } from '$lib/stores/user';
-import { decodeToken } from '$lib/helper';
 import { URL_BASE_AUTH } from '$env/static/private';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -49,8 +47,6 @@ export const actions: Actions = {
       sameSite: 'strict',
       maxAge: maxDays * 60 * 60 * 24
     });
-
-    user.set(decodeToken(token));
 
     throw redirect(303, '/');
   }
