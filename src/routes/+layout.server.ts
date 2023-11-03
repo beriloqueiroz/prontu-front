@@ -1,4 +1,4 @@
-import { decodeToken } from '$lib/helper.js';
+import { decodeToken } from '$lib/server/helper.js';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from '../app';
 

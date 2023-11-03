@@ -1,4 +1,4 @@
-import type { Professional } from "$lib/interface/professional";
+import type { Professional } from "$lib/interface/professional/professional";
 import { writable } from "svelte/store";
 
 const { subscribe, set, update } = writable<Professional | null>(null);

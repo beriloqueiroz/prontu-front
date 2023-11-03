@@ -1,5 +1,5 @@
 import { redirect, type Handle } from "@sveltejs/kit";
-import { decodeToken } from "$lib/helper";
+import { decodeToken } from "$lib/server/helper";
 import { URL_BASE_AUTH } from '$env/static/private';
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
