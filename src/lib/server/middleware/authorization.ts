@@ -3,7 +3,7 @@ import { decodeToken } from "$lib/server/helper";
 import { URL_BASE_AUTH } from '$env/static/private';
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
-    if (event.url.pathname.startsWith('/internal/professional')) {
+    if (event.url.pathname.startsWith('/api/professional')) {
         const token = event.cookies.get("AuthorizationToken");
         if (!token) {
             return new Response(null, { status: 401 });

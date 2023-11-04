@@ -15,5 +15,5 @@
 
 ### detalhes do projeto
 
-- ao fazer login o usuário é direcionado para home, lá é feita uma requisição para o back do front (bunjs), usando o username do usuário para buscar os dados do profissional. Todos os endpoints do back do front deverão estar em routes/internal/*. Esta requisição faz de fato a chamada para o backend, agora do lado do servidor.
+- ao fazer login o usuário é direcionado para home, lá é feita uma requisição para o back do front (bunjs), usando o username do usuário para buscar os dados do profissional. Todos os endpoints do back do front deverão estar em routes/api/*. Esta requisição faz de fato a chamada para o backend, agora do lado do servidor.
 - As chamadas do lado do servidor do front também são feitas nos arquivos +page.serve.ts, por exemplo na página de login.
