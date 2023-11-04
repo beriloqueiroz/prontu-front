@@ -10,8 +10,7 @@
 	let institutions = [
 		{ value: 'crpce', name: 'CRP-CE' },
 		{ value: 'crpsp', name: 'CRP-SP' },
-		{ value: 'crm', name: 'CRM' },
-		{ value: 'oab', name: 'OAB' }
+		{ value: 'crm', name: 'CRM' }
 	];
 
 	let error: string | null = null;
@@ -77,15 +76,15 @@
 		</div>
 	</div>
 	<div class="mb-6">
-		<Label for="email" class="mb-2">Email address</Label>
+		<Label for="email" class="mb-2">Email</Label>
 		<Input type="email" id="email" placeholder="john.doe@company.com" required name="email" />
 	</div>
 	<div class="mb-6">
-		<Label for="password" class="mb-2">Password</Label>
+		<Label for="password" class="mb-2">Senha</Label>
 		<Input type="password" id="password" placeholder="•••••••••" required name="password" />
 	</div>
 	<div class="mb-6">
-		<Label for="confirm_password" class="mb-2">Confirm password</Label>
+		<Label for="confirm_password" class="mb-2">Confirme a senha</Label>
 		<Input
 			type="password"
 			id="confirm_password"
