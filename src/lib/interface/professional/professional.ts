@@ -5,6 +5,11 @@ export interface Professional {
   name: string,
   document: string,
   professionalDocument: string,
+  professionalDocumentInstitution: string,
   email: string,
   patients: Patient[]
-} 
+}
+
+export type ProfessionalRecord = Record<
+  keyof Professional,
+  Professional[keyof Professional]>;

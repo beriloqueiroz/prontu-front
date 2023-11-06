@@ -62,6 +62,12 @@
 			<Label>
 				Orgão:
 				<Select class="mt-2" items={institutions} bind:value={institution_selected} />
+				<input
+					type="hidden"
+					value={institution_selected}
+					name="professionalDocumentInstitution"
+					id="professionalDocumentInstitution"
+				/>
 			</Label>
 
 			<Label for="professionalDocument" class="mb-2">Documento Profissional</Label>

@@ -6,7 +6,7 @@
 </script>
 
 {#if show}
-	<Alert color="red">
+	<Alert color="green">
 		<small>{message}</small>
 	</Alert>
 {/if}

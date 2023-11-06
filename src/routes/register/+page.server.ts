@@ -11,6 +11,7 @@ export const actions: Actions = {
     const name = String(data.get('name'));
     const document = String(data.get('document')).replaceAll(".", "").replaceAll("-", "");
     const professionalDocument = String(data.get('professionalDocument'));
+    const professionalDocumentInstitution = String(data.get('professionalDocumentInstitution'));
 
     const professionalResponse = await fetch(`${URL_BASE_BACKEND}/professional`, {
       method: "POST",
@@ -18,7 +19,7 @@ export const actions: Actions = {
         "content-type": "application/json"
       },
       body: JSON.stringify({
-        email, name, document, professionalDocument
+        email, name, document, professionalDocument, professionalDocumentInstitution
       })
     });
 
