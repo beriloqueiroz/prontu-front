@@ -1,11 +1,12 @@
 <script lang="ts">
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import type { Professional, ProfessionalRecord } from '$lib/interface/professional/professional';
 	import { professional } from '$lib/stores/professional';
 
 	import { deserialize } from '$app/forms';
+	import { user } from '$lib/stores/user';
 	import { Button, Input, Label, Toggle } from 'flowbite-svelte';
+	import { goto } from '$app/navigation';
 
 	let error: string | null = null;
 	let loading = false;
@@ -25,7 +26,7 @@
 			}
 		});
 
-		const result = deserialize<ProfessionalRecord, ProfessionalRecord>(await response.text());
+		const result = deserialize(await response.text());
 
 		if (result.type === 'error') {
 			error = result.error.message;
@@ -33,11 +34,14 @@
 			return;
 		}
 
-		if (result.type === 'success') professional.set(result.data as Professional);
+		professional.set(null);
+		user.set(null);
 
 		loading = false;
-
 		isEditPass = false;
+
+		// mostrar mensagem temporária de sucesso e de redirecionamento para o login
+		goto('/login');
 	}
 </script>
 
@@ -83,6 +87,9 @@
 				{/if}
 			</Button>
 		{/if}
+		<p class="py-1 text-gray-600">
+			Após alterar, você será "deslogado" e terá de entrar novamente usando a nova senha!
+		</p>
 		<ErrorMessage show={!!error} message={error} />
 	</form>
 {/key}

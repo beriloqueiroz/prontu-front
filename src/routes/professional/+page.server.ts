@@ -87,9 +87,27 @@ export const actions: Actions = {
       });
     }
 
+    //logout
+    const response: Response = await fetch(`${URL_BASE_AUTH}/User/logout`, {
+      method: 'DELETE',
+      headers: {
+        "content-type": "application/json",
+        "Authorization": `Bearer ${cookies.get("AuthorizationToken")}`
+      }
+    });
 
-    /* TODO aqui tem que salvar o email no backend também. Tem o problema de não confirmação do email pelo usuário e
-     o email não tiver sido de fato alterado.
-    */
+    if (!response.ok) {
+      throw error(response.status, {
+        message: response.statusText
+      });
+    }
+    cookies.delete("AuthorizationToken");//esse não funciona
+    cookies.set('AuthorizationToken', '', {
+      httpOnly: true,
+      path: '/',
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 0
+    });
   }
 };
