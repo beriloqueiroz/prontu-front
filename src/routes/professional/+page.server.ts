@@ -43,7 +43,7 @@ export const actions: Actions = {
     if (user?.email === email) {
       throw error(400, "Não há mudança no email!")
     }
-    const userResponse = await fetch(`${URL_BASE_AUTH}/User/change-email`,
+    const userResponse = await fetch(`${URL_BASE_AUTH}/User/change-email?email=${email}`,
       {
         method: "PUT",
         headers: {
@@ -65,7 +65,7 @@ export const actions: Actions = {
      o email não tiver sido de fato alterado.
     */
   },
-  editPassoword: async ({ request, cookies }) => {
+  editPass: async ({ request, cookies }) => {
     const data = await request.formData();
     const newPassword = String(data.get('password'));
     const oldPassword = String(data.get('oldPassword'));
@@ -77,7 +77,7 @@ export const actions: Actions = {
           "content-type": "application/json",
           Authorization: `Bearer ${cookies.get("AuthorizationToken")}`,
         },
-        body: JSON.stringify({ password: newPassword, oldPassword })
+        body: JSON.stringify({ newPassword, oldPassword })
       });
 
     if (!userResponse.ok) {
