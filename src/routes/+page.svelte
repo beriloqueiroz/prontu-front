@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+	import PatientCard from '$lib/components/PatientCard.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import type { Professional } from '$lib/interface/professional/professional';
 	import { professional } from '$lib/stores/professional';
 	import { user } from '$lib/stores/user';
 
-	import { TabItem, Tabs } from 'flowbite-svelte';
+	import { Button, TabItem, Tabs } from 'flowbite-svelte';
 
 	$: professionalId = $user?.username;
 
@@ -34,7 +35,17 @@
 	{:then}
 		<Tabs class="flex justify-center flex-nowrap">
 			<TabItem open title="Pacientes">
-				{$professional?.patients}
+				<div class="w-100 flex justify-center flex-col">
+					<Button>Adicionar Paciente!</Button>
+					{#if $professional?.patients?.length === 0}
+						<p class="text-center p-1 mt-2">Nenhum usuário cadastrado!</p>
+					{/if}
+				</div>
+				{#if $professional != null}
+					{#each $professional.patients as patient}
+						<PatientCard {patient} />
+					{/each}
+				{/if}
 			</TabItem>
 			<TabItem title="Sessões">Em breve</TabItem>
 		</Tabs>

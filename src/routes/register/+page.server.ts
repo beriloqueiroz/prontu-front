@@ -13,6 +13,12 @@ export const actions: Actions = {
     const professionalDocument = String(data.get('professionalDocument'));
     const professionalDocumentInstitution = String(data.get('professionalDocumentInstitution'));
 
+    if (password != rePassword) {
+      throw error(400, {
+        message: "Senha e sua confirmação não conferem"
+      });
+    }
+
     const professionalResponse = await fetch(`${URL_BASE_BACKEND}/professional`, {
       method: "POST",
       headers: {

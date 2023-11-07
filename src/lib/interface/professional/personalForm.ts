@@ -1,12 +1,13 @@
-import type { PaymentType } from "./enums/paymentType";
-import type { SessionType } from "./enums/sessionType";
-
 export interface PersonalForm {
-  defaultSessionPrice: number,
-  estimatedSessionsByWeek: number,
-  estimatedTimeSessionInMinutes: number,
-  sessionType: SessionType,
-  paymentType: PaymentType,
-  paymentPeriodInDays: number,
-  sessionQuantityPerPayment: number,
+  street: string,
+  neighborhood: string,
+  city: string,
+  number: string,
+  country: string,
+  zipCode: string,
+  region: string,
+  contact: string,
+  phones: string,
+  othersInfos: string,
+  observations: string,
 }

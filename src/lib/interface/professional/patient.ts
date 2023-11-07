@@ -5,7 +5,11 @@ export interface Patient {
   name: string,
   email: string,
   document: string,
-  active: string,
+  isActive: string,
   financialInfo: FinancialInfo,
-  personalForm: PersonalForm
+  personalForm: PersonalForm,
+  phones: Phone[],
+  avatar: string
 }
+
+export interface Phone { value: string, isChat: boolean }
