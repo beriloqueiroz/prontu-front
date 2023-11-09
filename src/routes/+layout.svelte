@@ -16,5 +16,5 @@
 		<slot />
 	</main>
 
-	<Footer />
+	<Footer class="w-100 p-2 m-auto" />
 </div>
