@@ -39,5 +39,21 @@ export const actions: Actions = {
     });
 
     throw redirect(303, '/');
+  },
+  forgot: async ({ request }) => {
+    const data = await request.formData();
+    const email = String(data.get('email'));
+
+    const response = await fetch(`${URL_BASE_AUTH}/User/forgot-password?email=${encodeURI(email)}`, {
+      method: 'PUT',
+      headers: {
+        "content-type": "application/json"
+      },
+      body: null
+    });
+
+    if (!response.ok) {
+      throw error(response.status, parseLoginError(response.status));
+    }
   }
 };
