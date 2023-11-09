@@ -1,6 +1,7 @@
-import { redirect, type Handle } from "@sveltejs/kit";
+import { redirect, type Handle, error } from "@sveltejs/kit";
 import { decodeToken } from "$lib/server/helper";
-import { URL_BASE_AUTH } from '$env/static/private';
+import { BACKEND_TIMEOUT, URL_BASE_AUTH } from '$env/static/private';
+import { timeout } from "../timeouts";
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
     if (event.url.pathname.startsWith('/api/professional')) {
@@ -25,12 +26,13 @@ export const authorizationMiddleware: Handle = async ({ event, resolve }): Promi
 async function IsValidToken(authToken: string): Promise<boolean> {
     const claims = decodeToken(authToken);
     if (!claims) return false;
+
     const authorizationResponse = await fetch(`${URL_BASE_AUTH}/User/authorization`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${authToken}`,
             "content-type": "application/json"
-        }
+        },
     })
     return authorizationResponse.ok;
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { professional } from '$lib/stores/professional';
 	import { user } from '$lib/stores/user';
 	import { redirect } from '@sveltejs/kit';
 	import { NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
@@ -12,8 +13,8 @@
 	}
 </script>
 
-<Navbar>
-	<NavBrand href="/" />
+<Navbar {...$$props}>
+	<NavBrand href="/">{$professional?.name}</NavBrand>
 	<NavHamburger />
 	<NavUl>
 		<NavLi href="/">Inicio</NavLi>

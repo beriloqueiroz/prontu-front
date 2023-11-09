@@ -10,7 +10,7 @@
 </script>
 
 <div class="app p-0 flex flex-col h-screen justify-between">
-	<Header />
+	<Header class="p-2" />
 
 	<main class="mb-auto w-100 mt-3 p-2">
 		<slot />

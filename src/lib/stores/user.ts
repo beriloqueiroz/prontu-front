@@ -1,4 +1,4 @@
-import type { User } from "$lib/interface/user";
+import type { User } from "$lib/interface/user/user";
 import { writable } from "svelte/store";
 
 const { subscribe, set, update } = writable<User | null>(null);
