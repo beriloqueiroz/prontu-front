@@ -1,7 +1,6 @@
-import { redirect, type Handle, error } from "@sveltejs/kit";
+import { URL_BASE_AUTH } from '$env/static/private';
 import { decodeToken } from "$lib/server/helper";
-import { BACKEND_TIMEOUT, URL_BASE_AUTH } from '$env/static/private';
-import { timeout } from "../timeouts";
+import { redirect, type Handle } from "@sveltejs/kit";
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
     if (event.url.pathname.startsWith('/api/professional')) {
