@@ -1,7 +1,9 @@
 import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
+import { http } from '$lib/server/http/server';
 import type { Phone } from '$lib/interface/professional/patient';
 import { decodeToken } from '$lib/server/helper';
 import { error, type Actions } from '@sveltejs/kit';
+
 
 export const actions: Actions = {
   edit: async ({ request }) => {
@@ -12,7 +14,7 @@ export const actions: Actions = {
     const document = String(data.get('document')).replaceAll(".", "").replaceAll("-", "");
     const professionalDocument = String(data.get('professionalDocument'));
 
-    const professionalResponse = await fetch(`${URL_BASE_BACKEND}/professional/${id}`, {
+    const professionalResponse = await http.request(`${URL_BASE_BACKEND}/professional/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json"
@@ -43,7 +45,7 @@ export const actions: Actions = {
     if (user?.email === email) {
       throw error(400, "Não há mudança no email!")
     }
-    const userResponse = await fetch(`${URL_BASE_AUTH}/User/change-email`,
+    const userResponse = await http.request(`${URL_BASE_AUTH}/User/change-email`,
       {
         method: "PUT",
         headers: {
@@ -70,7 +72,7 @@ export const actions: Actions = {
     const newPassword = String(data.get('password'));
     const oldPassword = String(data.get('oldPassword'));
 
-    const userResponse = await fetch(`${URL_BASE_AUTH}/User/change-password`,
+    const userResponse = await http.request(`${URL_BASE_AUTH}/User/change-password`,
       {
         method: "PUT",
         headers: {
@@ -112,7 +114,7 @@ export const actions: Actions = {
       }
     ]
 
-    const response = await fetch(`${URL_BASE_BACKEND}/professional/${professionalId}`, {
+    const response = await http.request(`${URL_BASE_BACKEND}/professional/${professionalId}`, {
       method: "POST",
       headers: {
         "content-type": "application/json"

@@ -14,7 +14,7 @@
 </script>
 
 <Navbar {...$$props}>
-	<NavBrand href="/">{$professional?.name}</NavBrand>
+	<NavBrand href="/">{$professional?.name || ''}</NavBrand>
 	<NavHamburger />
 	<NavUl>
 		<NavLi href="/">Inicio</NavLi>

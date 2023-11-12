@@ -9,6 +9,7 @@
 	import { user } from '$lib/stores/user';
 	import { Button, CloseButton, Drawer, Search, TabItem, Tabs } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
+	import { error } from '@sveltejs/kit';
 
 	let hideAddPatient = true;
 	let transitionParams = {
@@ -26,7 +27,14 @@
 		const response = await fetch(
 			`${location.protocol}//${location.host}/api/professional?id=${id}`
 		);
-		const professionalResponse = await response.json();
+
+		const result = await response.json();
+
+		if (!response.ok) {
+			throw error(response.status, result);
+		}
+
+		const professionalResponse = result;
 		professional.set(professionalResponse);
 		return professionalResponse;
 	}
@@ -69,7 +77,7 @@
 		</Tabs>
 	{:catch error}
 		<div>
-			<ErrorMessage message={error} show={error} />
+			<ErrorMessage message={JSON.parse(error).message} show={error} />
 		</div>
 	{/await}
 </section>

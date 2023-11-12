@@ -1,5 +1,6 @@
 import { redirect, type Actions, error } from '@sveltejs/kit';
 import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
+import { http } from '$lib/server/http/server';
 
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
@@ -19,7 +20,7 @@ export const actions: Actions = {
       });
     }
 
-    const professionalResponse = await fetch(`${URL_BASE_BACKEND}/professional`, {
+    const professionalResponse = await http.request(`${URL_BASE_BACKEND}/professional`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -41,7 +42,7 @@ export const actions: Actions = {
     const username = professionalResponseJson.id;
     //TODO, verificar quando erro em um dos serviçoes, auth or back
 
-    const userResponse = await fetch(`${URL_BASE_AUTH}/User/register`,
+    const userResponse = await http.request(`${URL_BASE_AUTH}/User/register`,
       {
         method: "POST",
         headers: {

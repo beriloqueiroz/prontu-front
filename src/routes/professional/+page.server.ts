@@ -1,4 +1,5 @@
 import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
+import { http } from '$lib/server/http/server';
 import { decodeToken } from '$lib/server/helper';
 import { error, type Actions } from '@sveltejs/kit';
 
@@ -12,7 +13,7 @@ export const actions: Actions = {
     const professionalDocument = String(data.get('professionalDocument'));
     const professionalDocumentInstitution = String(data.get('professionalDocumentInstitution'));
 
-    const professionalResponse = await fetch(`${URL_BASE_BACKEND}/professional/${id}`, {
+    const professionalResponse = await http.request(`${URL_BASE_BACKEND}/professional/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json"
@@ -43,7 +44,7 @@ export const actions: Actions = {
     if (user?.email === email) {
       throw error(400, "Não há mudança no email!")
     }
-    const userResponse = await fetch(`${URL_BASE_AUTH}/User/change-email?email=${email}`,
+    const userResponse = await http.request(`${URL_BASE_AUTH}/User/change-email?email=${email}`,
       {
         method: "PUT",
         headers: {
@@ -70,7 +71,7 @@ export const actions: Actions = {
     const newPassword = String(data.get('password'));
     const oldPassword = String(data.get('oldPassword'));
 
-    const userResponse = await fetch(`${URL_BASE_AUTH}/User/change-password`,
+    const userResponse = await http.request(`${URL_BASE_AUTH}/User/change-password`,
       {
         method: "PUT",
         headers: {
@@ -88,7 +89,7 @@ export const actions: Actions = {
     }
 
     //logout
-    const response: Response = await fetch(`${URL_BASE_AUTH}/User/logout`, {
+    const response: Response = await http.request(`${URL_BASE_AUTH}/User/logout`, {
       method: 'DELETE',
       headers: {
         "content-type": "application/json",

@@ -1,8 +1,9 @@
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { URL_BASE_AUTH } from '$env/static/private';
+import { http } from "$lib/http/client";
 
 export const DELETE: RequestHandler = async ({ cookies }): Promise<Response> => {
-    const response: Response = await fetch(`${URL_BASE_AUTH}/User/logout`, {
+    const response: Response = await http.request(`${URL_BASE_AUTH}/User/logout`, {
         method: 'DELETE',
         headers: {
             "content-type": "application/json",

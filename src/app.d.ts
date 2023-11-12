@@ -5,7 +5,10 @@ import type { User } from "$lib/interface/user";
 // for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
+		interface Error {
+			message: string,
+			code?: number
+		}
 		interface Locals {
 			user: User | undefined,
 		}
@@ -15,6 +18,11 @@ declare global {
 }
 
 export { };
+
+export interface DefaultError {
+	message: string,
+	code?: number
+}
 
 export type PageServerLoad = Kit.ServerLoad<RouteParams>;
 export type PageLoad = Kit.Load<RouteParams>;
