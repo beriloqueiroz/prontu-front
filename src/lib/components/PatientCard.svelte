@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { Patient } from '$lib/interface/professional/patient';
-	import { A, Avatar, Badge, Card, Indicator } from 'flowbite-svelte';
+	import { A, Avatar, Badge, Button, Card, Indicator } from 'flowbite-svelte';
 
 	import PhoneButton from './PhoneButton.svelte';
 	import WhatsappButton from './WhatsappButton.svelte';
+	import { goto } from '$app/navigation';
 	export let patient: Patient;
 </script>
 
@@ -37,4 +38,5 @@
 			{/if}
 		</div>
 	</div>
+	<Button on:click={() => goto(`/patient/${patient.id}`)}>Editar</Button>
 </Card>
