@@ -1,29 +1,29 @@
 import type { DefaultError } from "../../../app";
 
 export const http = {
-  request: async function request(input: RequestInfo, init?: RequestInit | undefined, timeout = 6000): Promise<Response> {
+  request
+}
 
-    const controller = new AbortController();
-    const id = setTimeout(() => {
-      controller.abort({ message: "Timeout", code: 408 });
-    }, timeout);
+async function request(input: RequestInfo, init?: RequestInit | undefined, timeout = 6000): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => {
+    controller.abort({ message: "Timeout", code: 408 });
+  }, timeout);
 
-    try {
-      const response = await fetch(input, {
-        ...init,
-        signal: controller.signal
-      });
-      clearTimeout(id);
-      return response;
-    } catch (error) {
-      clearTimeout(id);
-      const expectedError = error as DefaultError;
-      if (expectedError?.code === 408) {
-        return timeoutResponseError();
-      }
-      return unexpectedResponseError();
+  try {
+    const response = await fetch(input, {
+      ...init,
+      signal: controller.signal
+    });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    const expectedError = error as DefaultError;
+    if (expectedError?.code === 408) {
+      return timeoutResponseError();
     }
-
+    return unexpectedResponseError();
   }
 }
 
@@ -42,3 +42,4 @@ function unexpectedResponseError(): Response {
   });
   return new Response(blob, { status: 503 });
 }
+

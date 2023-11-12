@@ -22,7 +22,7 @@
 				return;
 			}
 			loading = false;
-			successForgotMessage = 'Sucesso ao enviar email com sua senha!';
+			successForgotMessage = 'Sucesso ao adicionar paciente!';
 			professional.set(result.data);
 			setTimeout(() => {
 				successForgotMessage = null;

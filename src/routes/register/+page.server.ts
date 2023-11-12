@@ -1,18 +1,41 @@
 import { redirect, type Actions, error } from '@sveltejs/kit';
 import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
 import { http } from '$lib/server/http/server';
+import { z } from 'zod';
+import { isValidCPF, isValidPassword } from '$lib/helpers';
+import { allInstitution } from '$lib/interface/professional/enums/institution';
+
+const registerProfessionalSchema = z.object({
+  name: z.string().trim().min(3, { message: "Email deve conter mais do que 3 caracteres" }),
+  email: z.string().trim().email({ message: "Email inválido" }).min(1),
+  document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
+  professionalDocument: z.string().min(3, { message: "Insira um documento profissional válido!" }),
+  professionalDocumentInstitution: z.enum([allInstitution[0].toString(), ...allInstitution.map(elem => elem.toString())]),
+  password: z.custom((val) => typeof val === "string" ? isValidPassword(val).success : false, (val) => ({ message: isValidPassword(val).errors })),
+  rePassword: z.string(),
+}).refine((data) => data.password === data.rePassword, {
+  message: "As senhas não são iguais",
+  path: ["rePassword"]
+});
 
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
   register: async ({ request }) => {
     const data = await request.formData();
-    const email = String(data.get('email'));
-    const password = String(data.get('password'));
-    const rePassword = String(data.get('rePassword'));
-    const name = String(data.get('name'));
-    const document = String(data.get('document')).replaceAll(".", "").replaceAll("-", "");
-    const professionalDocument = String(data.get('professionalDocument'));
-    const professionalDocumentInstitution = String(data.get('professionalDocumentInstitution'));
+
+    const zodResponse = registerProfessionalSchema.safeParse(Object.fromEntries(data));
+
+    if (!zodResponse.success) {
+      throw error(400, {
+        message: zodResponse.error.errors.map(err => err.message).join(", ")
+      });
+    }
+
+    const { name, professionalDocument, document, email, professionalDocumentInstitution, rePassword, password } = {
+      ...zodResponse.data,
+      document: zodResponse.data.document.replaceAll(".", "").replaceAll("-", "")
+    }
+
 
     if (password != rePassword) {
       throw error(400, {
@@ -31,9 +54,9 @@ export const actions: Actions = {
     });
 
     if (!professionalResponse.ok) {
-      const errors = await professionalResponse.text();
+      const errors = await professionalResponse.json();
       throw error(professionalResponse.status, {
-        message: errors
+        message: errors.title
       });
     }
 

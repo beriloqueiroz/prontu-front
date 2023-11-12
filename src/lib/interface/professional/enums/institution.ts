@@ -6,5 +6,5 @@ export const allInstitution: Institution[] = [Institution.CRM, Institution.CRP_C
 
 export function getInstitutionKey(value: string) {
   const indexOfS = Object.values(Institution).indexOf(value as unknown as Institution);
-  return Object.keys(Institution)[indexOfS];;
+  return Object.keys(Institution)[indexOfS];
 }

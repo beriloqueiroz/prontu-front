@@ -1,17 +1,45 @@
 import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
 import { http } from '$lib/server/http/server';
 import { decodeToken } from '$lib/server/helper';
-import { error, type Actions } from '@sveltejs/kit';
+import { error, type Actions, redirect } from '@sveltejs/kit';
+import { z } from 'zod';
+import { allInstitution } from '$lib/interface/professional/enums/institution';
+import { isValidCPF, isValidPassword } from '$lib/helpers';
+
+const editProfessionalSchema = z.object({
+  name: z.string().trim().min(3, { message: "Email deve conter mais do que 3 caracteres" }),
+  email: z.string().trim().email({ message: "Email inválido" }).min(1),
+  id: z.string().uuid(),
+  document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
+  professionalDocument: z.string().min(3, { message: "Insira um documento profissional válido!" }),
+  professionalDocumentInstitution: z.enum([allInstitution[0].toString(), ...allInstitution.map(elem => elem.toString())]),
+});
+
+const editPasswordSchema = z.object({
+  password: z.custom((val) => typeof val === "string" ? isValidPassword(val).success : false, (val) => ({ message: isValidPassword(val).errors })),
+  oldPassword: z.string().min(1),
+});
+
+const editEmailSchema = z.object({
+  email: z.string().trim().email({ message: "Email inválido" }).min(1),
+});
 
 export const actions: Actions = {
   edit: async ({ request }) => {
     const data = await request.formData();
-    const name = String(data.get('name'));
-    const email = String(data.get('email'));
-    const id = String(data.get('id'));
-    const document = String(data.get('document')).replaceAll(".", "").replaceAll("-", "");
-    const professionalDocument = String(data.get('professionalDocument'));
-    const professionalDocumentInstitution = String(data.get('professionalDocumentInstitution'));
+
+    const zodResponse = editProfessionalSchema.safeParse(Object.fromEntries(data));
+
+    if (!zodResponse.success) {
+      throw error(400, {
+        message: zodResponse.error.errors.map(err => err.message).join(", ")
+      });
+    }
+
+    const { name, professionalDocument, document, email, professionalDocumentInstitution, id } = {
+      ...zodResponse.data,
+      document: zodResponse.data.document.replaceAll(".", "").replaceAll("-", "")
+    }
 
     const professionalResponse = await http.request(`${URL_BASE_BACKEND}/professional/${id}`, {
       method: "PUT",
@@ -24,9 +52,9 @@ export const actions: Actions = {
     });
 
     if (!professionalResponse.ok) {
-      const errors = await professionalResponse.text();
+      const errors = await professionalResponse.json();
       throw error(professionalResponse.status, {
-        message: errors
+        message: errors.title
       });
     }
 
@@ -34,6 +62,7 @@ export const actions: Actions = {
 
     return professionalResponseJson;
   },
+
   editEmail: async ({ request, cookies }) => {
     const token = cookies.get("AuthorizationToken");
     if (!token) throw error(500, "erro ao tentar salvar com token informado!")
@@ -42,8 +71,17 @@ export const actions: Actions = {
     const email = String(data.get('email'));
 
     if (user?.email === email) {
-      throw error(400, "Não há mudança no email!")
+      throw error(400, "Oxe, num mudou foi nada aí!")
     }
+
+    const zodResponse = editEmailSchema.safeParse(Object.fromEntries(data));
+
+    if (!zodResponse.success) {
+      throw error(400, {
+        message: zodResponse.error.errors.map(err => err.message).join(", ")
+      });
+    }
+
     const userResponse = await http.request(`${URL_BASE_AUTH}/User/change-email?email=${email}`,
       {
         method: "PUT",
@@ -55,9 +93,9 @@ export const actions: Actions = {
       });
 
     if (!userResponse.ok) {
-      const errors = await userResponse.text();
+      const errors = await userResponse.json();
       throw error(userResponse.status, {
-        message: errors
+        message: errors.title
       });
     }
 
@@ -66,10 +104,19 @@ export const actions: Actions = {
      o email não tiver sido de fato alterado.
     */
   },
+
   editPass: async ({ request, cookies }) => {
     const data = await request.formData();
     const newPassword = String(data.get('password'));
     const oldPassword = String(data.get('oldPassword'));
+
+    const zodResponse = editPasswordSchema.safeParse(Object.fromEntries(data));
+
+    if (!zodResponse.success) {
+      throw error(400, {
+        message: zodResponse.error.errors.map(err => err.message).join(", ")
+      });
+    }
 
     const userResponse = await http.request(`${URL_BASE_AUTH}/User/change-password`,
       {
@@ -82,26 +129,12 @@ export const actions: Actions = {
       });
 
     if (!userResponse.ok) {
-      const errors = await userResponse.text();
+      const errors = await userResponse.json();
       throw error(userResponse.status, {
-        message: errors
+        message: errors.title
       });
     }
 
-    //logout
-    const response: Response = await http.request(`${URL_BASE_AUTH}/User/logout`, {
-      method: 'DELETE',
-      headers: {
-        "content-type": "application/json",
-        "Authorization": `Bearer ${cookies.get("AuthorizationToken")}`
-      }
-    });
-
-    if (!response.ok) {
-      throw error(response.status, {
-        message: response.statusText
-      });
-    }
     cookies.delete("AuthorizationToken");//esse não funciona
     cookies.set('AuthorizationToken', '', {
       httpOnly: true,
@@ -110,5 +143,7 @@ export const actions: Actions = {
       sameSite: 'strict',
       maxAge: 0
     });
+
+    redirect(300, "/login")
   }
 };
