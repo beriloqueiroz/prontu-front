@@ -11,7 +11,7 @@
 	let loading = false;
 	export let runAfterSubmit: () => void = () => {};
 
-	let successForgotMessage: string | null = null;
+	let successMessage: string | null = null;
 
 	async function handleRegister() {
 		loading = true;
@@ -22,10 +22,10 @@
 				return;
 			}
 			loading = false;
-			successForgotMessage = 'Sucesso ao adicionar paciente!';
+			successMessage = 'Sucesso ao adicionar paciente!';
 			professional.set(result.data);
 			setTimeout(() => {
-				successForgotMessage = null;
+				successMessage = null;
 				error = null;
 				runAfterSubmit();
 			}, 2000);
@@ -73,5 +73,5 @@
 		{/if}
 	</Button>
 	<ErrorMessage show={!!error} message={error} />
-	<SuccessMessage show={!!successForgotMessage} message={successForgotMessage} />
+	<SuccessMessage show={!!successMessage} message={successMessage} />
 </form>

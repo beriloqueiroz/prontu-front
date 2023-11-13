@@ -6,7 +6,7 @@ export interface Patient {
   name: string,
   email: string,
   document: string,
-  isActive: string,
+  isActive: boolean,
   financialInfo: FinancialInfo,
   personalForm: PersonalForm,
   phones: Phone[],
