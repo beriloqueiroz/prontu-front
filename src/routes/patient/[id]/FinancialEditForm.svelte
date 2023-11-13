@@ -15,6 +15,7 @@
 		getSessionTypeKey
 	} from '$lib/interface/professional/enums/sessionType';
 	import {
+		PaymentType,
 		allPaymentTypes,
 		getPaymentTypeKey
 	} from '$lib/interface/professional/enums/paymentType';
@@ -27,6 +28,7 @@
 		name: getSessionTypeKey(st)
 	}));
 	let paymentType_selected = patient.financialInfo?.paymentType;
+	$: isPerSession = paymentType_selected == PaymentType['POR SESSÃO'];
 	let paymentTypes = allPaymentTypes.map((st) => ({
 		value: st,
 		name: getPaymentTypeKey(st)
@@ -101,25 +103,36 @@
 				<input type="hidden" value={paymentType_selected} name="paymentType" id="paymentType" />
 			</Label>
 		</div>
-		<div>
-			<Label for="paymentPeriodInDays" class="mb-2">Período de pagamento em dias</Label>
-			<Input
-				type="number"
-				id="paymentPeriodInDays"
-				name="paymentPeriodInDays"
-				value={patient.financialInfo?.paymentPeriodInDays || 1}
-			/>
-		</div>
-		<div>
-			<Label for="sessionQuantityPerPayment" class="mb-2">Quantidade de sessões por pagamento</Label
-			>
-			<Input
-				type="number"
-				id="sessionQuantityPerPayment"
+		{#if !isPerSession}
+			<div>
+				<Label for="paymentPeriodInDays" class="mb-2">Período de pagamento em dias</Label>
+				<Input
+					type="number"
+					id="paymentPeriodInDays"
+					name="paymentPeriodInDays"
+					value={patient.financialInfo?.paymentPeriodInDays || 2}
+				/>
+			</div>
+			<div>
+				<Label for="sessionQuantityPerPayment" class="mb-2"
+					>Quantidade de sessões por pagamento</Label
+				>
+				<Input
+					type="number"
+					id="sessionQuantityPerPayment"
+					name="sessionQuantityPerPayment"
+					value={patient.financialInfo?.sessionQuantityPerPayment || 2}
+				/>
+			</div>
+		{:else}
+			<input type="hidden" value={1} name="paymentPeriodInDays" id="paymentPeriodInDays" />
+			<input
+				type="hidden"
+				value={1}
 				name="sessionQuantityPerPayment"
-				value={patient.financialInfo?.sessionQuantityPerPayment || 1}
+				id="sessionQuantityPerPayment"
 			/>
-		</div>
+		{/if}
 	</div>
 	<Button type="submit">
 		{#if loading}

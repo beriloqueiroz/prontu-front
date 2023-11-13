@@ -71,17 +71,17 @@ const editPatientFinancialSchema = z.object({
 const editPatientPersonalSchema = z.object({
   id: z.string().uuid(),
   professionalId: z.string().uuid(),
-  street: z.string(),
-  neighborhood: z.string(),
-  city: z.string(),
-  number: z.string(),
-  country: z.string(),
-  zipCode: z.string(),
-  region: z.string(),
-  contact: z.string(),
-  phones: z.string(),
-  othersInfos: z.string(),
-  observations: z.string()
+  street: z.string().nullable(),
+  neighborhood: z.string().nullable(),
+  city: z.string().nullable(),
+  number: z.string().nullable(),
+  country: z.string().nullable(),
+  zipCode: z.string().nullable(),
+  region: z.string().nullable(),
+  contact: z.string().nullable(),
+  phones: z.string().nullable(),
+  othersInfos: z.string().nullable(),
+  observations: z.string().nullable()
 });
 
 
@@ -184,6 +184,7 @@ export const actions: Actions = {
   editPersonal: async ({ request }) => {
     const data = await request.formData();
     const zodResponse = editPatientPersonalSchema.safeParse(Object.fromEntries(data));
+    console.log("🚀 ~ file: +page.server.ts:187 ~ editPersonal: ~ zodResponse:", JSON.stringify(zodResponse))
 
     if (!zodResponse.success) {
       throw error(400, {

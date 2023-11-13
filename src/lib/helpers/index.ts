@@ -1,4 +1,3 @@
-
 export function isValidCPF(cpf: string): boolean {
   // Remover caracteres não numéricos
   const cpfLimpo = cpf.replace(/\D/g, '');

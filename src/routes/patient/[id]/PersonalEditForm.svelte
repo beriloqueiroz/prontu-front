@@ -14,6 +14,7 @@
 	let error: string | null = null;
 	let loading = false;
 	let successMessage: string | null = null;
+	let otherInfo = patient.personalForm?.othersInfos || '';
 
 	async function handleEdit() {
 		loading = true;
@@ -46,7 +47,7 @@
 				maskChar="_"
 				placeholder="60000-000"
 				name="zipCode"
-				value={patient.personalForm?.zipCode}
+				value={patient.personalForm?.zipCode || ''}
 			/>
 		</div>
 		<div>
@@ -63,25 +64,25 @@
 				type="text"
 				id="neighborhood"
 				name="neighborhood"
-				value={patient.personalForm?.neighborhood}
+				value={patient.personalForm?.neighborhood || ''}
 			/>
 		</div>
 		<div>
-			<Label for="complement" class="mb-2">Complemento</Label>
+			<Label for="observations" class="mb-2">Complemento</Label>
 			<Input
 				type="text"
-				id="complement"
-				name="complement"
+				id="observations"
+				name="observations"
 				value={patient.personalForm?.observations}
 			/>
 		</div>
 		<div>
 			<Label for="city" class="mb-2">Cidade</Label>
-			<Input type="text" id="city" name="city" value={patient.personalForm?.city} />
+			<Input type="text" id="city" name="city" value={patient.personalForm?.city || ''} />
 		</div>
 		<div>
 			<Label for="region" class="mb-2">Estado</Label>
-			<Input type="text" id="region" name="region" value={patient.personalForm?.region} />
+			<Input type="text" id="region" name="region" value={patient.personalForm?.region || ''} />
 		</div>
 		<div>
 			<Label for="country" class="mb-2">País</Label>
@@ -94,20 +95,16 @@
 		</div>
 		<div>
 			<Label for="contact" class="mb-2">Contatos</Label>
-			<Input type="text" id="contact" name="contact" value={patient.personalForm?.contact} />
+			<Input type="text" id="contact" name="contact" value={patient.personalForm?.contact || ''} />
 		</div>
 		<div>
 			<Label for="phones" class="mb-2">Telefones</Label>
-			<Input type="text" id="phones" name="phones" value={patient.personalForm?.phones} />
+			<Input type="text" id="phones" name="phones" value={patient.personalForm?.phones || ''} />
 		</div>
 		<div>
 			<Label for="othersInfos" class="mb-2">Outras Informações</Label>
-			<Textarea
-				type="text"
-				id="othersInfos"
-				name="othersInfos"
-				value={patient.personalForm?.othersInfos}
-			/>
+			<Textarea type="text" id="othersInfos" name="othersInfos" bind:value={otherInfo} rows="4" />
+			<input type="hidden" value={otherInfo} name="othersInfos" id="othersInfos" />
 		</div>
 		<Button type="submit">
 			{#if loading}
