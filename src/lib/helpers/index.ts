@@ -84,3 +84,7 @@ export function isValidPassword(password: string): { success: boolean, errors: s
   if (!regexSpecial.test(password)) errors.push("É preciso ter ao menos 1 caractere especial, tal como #@!$%¨&");
   return { success: errors.length === 0, errors: errors.join(", ") };
 }
+
+export function currencyToNumber(currency: string): number {
+  return Number(currency.replaceAll("R$ ", "").replaceAll(",00", ""));
+}
