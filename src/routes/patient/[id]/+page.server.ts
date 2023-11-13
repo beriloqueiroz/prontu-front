@@ -44,6 +44,7 @@ const editPatientSchema = z.object({
   document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
   phone: z.string().min(15, { message: "Telefone inválido" }),
   chatPhone: z.string().min(15, { message: "Whatsapp inválido" }),
+  isActive: z.coerce.boolean()
 });
 
 
@@ -58,7 +59,7 @@ export const actions: Actions = {
       });
     }
 
-    const { name, document, email, id, professionalId, phone, chatPhone } = {
+    const { name, document, email, id, professionalId, phone, chatPhone, isActive } = {
       ...zodResponse.data,
       document: zodResponse.data.document.replaceAll(".", "").replaceAll("-", "")
     }
@@ -80,7 +81,7 @@ export const actions: Actions = {
         "content-type": "application/json"
       },
       body: JSON.stringify({
-        email, name, document, phones
+        email, name, document, phones, isActive
       })
     });
 

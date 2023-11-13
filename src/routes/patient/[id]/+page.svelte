@@ -27,6 +27,7 @@
 			}
 			loading = false;
 			successMessage = 'Sucesso ao editar paciente!';
+			data.patient = result.data;
 			//TODO update patient on professional store
 			await applyAction(result);
 		};

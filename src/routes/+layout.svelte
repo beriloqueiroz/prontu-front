@@ -1,12 +1,15 @@
 <script lang="ts">
 	import '../main.css';
 
-	import { user } from '$lib/stores/user';
-	import type { User } from '$lib/interface/user/user';
-	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	export let data: { user: User };
+	import Header from '$lib/components/Header.svelte';
+	import type { User } from '$lib/interface/user/user';
+	import { user } from '$lib/stores/user';
+	import { professional } from '$lib/stores/professional';
+	import type { Professional } from '$lib/interface/professional/professional';
+	export let data: { user: User; professional: Professional };
 	$: user.set(data.user);
+	$: professional.set(data.professional);
 </script>
 
 <div class="app p-0 flex flex-col h-screen justify-between">
