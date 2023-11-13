@@ -16,10 +16,12 @@
 		</div>
 		<div class="flex justify-center flex-col gap-2">
 			<Avatar src={patient.avatar} rounded class="m-auto" />
-			<Badge color="green" rounded class="px-2.5 py-0.5 ">
-				<Indicator color="green" size="xs" class="mr-1" />{patient.isActive
-					? 'Ativo'
-					: 'Desativado'}
+			<Badge color={patient.isActive ? 'green' : 'red'} rounded class="px-2.5 py-0.5 ">
+				<Indicator
+					color={patient.isActive ? 'green' : 'orange'}
+					size="xs"
+					class="mr-1"
+				/>{patient.isActive ? 'Ativo' : 'Desativado'}
 			</Badge>
 		</div>
 	</div>
