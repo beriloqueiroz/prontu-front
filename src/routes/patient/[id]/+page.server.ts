@@ -186,7 +186,6 @@ export const actions: Actions = {
   editPersonal: async ({ request }) => {
     const data = await request.formData();
     const zodResponse = editPatientPersonalSchema.safeParse(Object.fromEntries(data));
-    console.log("🚀 ~ file: +page.server.ts:187 ~ editPersonal: ~ zodResponse:", JSON.stringify(zodResponse))
 
     if (!zodResponse.success) {
       throw error(400, {

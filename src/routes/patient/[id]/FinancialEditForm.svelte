@@ -4,7 +4,6 @@
 	export let patient: Patient;
 	import { Input, Label, Button, Select } from 'flowbite-svelte';
 	import { applyAction, enhance } from '$app/forms';
-	import InputMask from '$lib/components/InputMask.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import { professional } from '$lib/stores/professional';
@@ -19,6 +18,7 @@
 		allPaymentTypes,
 		getPaymentTypeKey
 	} from '$lib/interface/professional/enums/paymentType';
+	import InputCurrency from '$lib/components/InputCurrency.svelte';
 
 	let error: string | null = null;
 	let loading = false;
@@ -58,15 +58,12 @@
 		<input type="hidden" value={patient.id} name="id" id="id" />
 		<div>
 			<Label for="defaultSessionPrice" class="mb-2">Valor padrão da sessão</Label>
-			<InputMask
-				type="text"
+			<InputCurrency
 				id="defaultSessionPrice"
 				required
-				mask="R$ 000,00"
-				maskChar="_"
 				placeholder="R$ 150,00"
 				name="defaultSessionPrice"
-				value={'R$ ' + patient.financialInfo?.defaultSessionPrice + ',00'}
+				value={patient.financialInfo?.defaultSessionPrice?.toFixed(2).replaceAll('.', ',')}
 			/>
 		</div>
 		<div>

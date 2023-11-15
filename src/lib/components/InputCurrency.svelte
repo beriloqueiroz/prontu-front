@@ -1,25 +1,30 @@
 <script>
-	// @ts-ignore
-	import MaskInput from 'svelte-input-mask';
+	// @ts-nocheck
 
-	let mask = '+55 (00) 0000-00000';
+	import InputMask from './InputMask.svelte';
 
-	// @ts-ignore
+	export let value;
+
+	let mask = value ? maskByValue(value) : 'R$ 000';
 	const handleChange = ({ detail }) => {
-		if (detail.inputState.unmaskedValue.length >= 11) {
-			mask = '+55 (00) 00000-0000';
-			return;
+		const sizeNumber = detail.inputState.unmaskedValue.length;
+		if (sizeNumber >= 1) {
+			mask = `R$ ${Array(sizeNumber + 3).join('0')}`;
 		}
-		mask = '+55 (00) 0000-00000';
+		value = detail.inputState.unmaskedValue;
 	};
+
+	function maskByValue(value) {
+		return `R$ ${Array(value.toString().split('.')[0].length - 1).join('0')}`;
+	}
 </script>
 
-<MaskInput
+<InputMask
 	{...$$props}
-	class="block w-full disabled:cursor-not-allowed disabled:opacity-50 p-2.5 focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 text-sm rounded-lg"
 	{mask}
-	type="tel"
 	maskChar=" "
 	alwaysShowMask
-	on:change={handleChange}
+	onChange={handleChange}
+	type="text"
+	{value}
 />
