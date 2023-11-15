@@ -1,7 +1,6 @@
 # TODO list
 
-- ajustar isActive patiente, inserir no professionalPatient (mudar muita coisa no back), ajustar datas também
-- editar paciente, inserir informações de financialinfor e personalForm
+- melhorar indicativo de erro nos campos de formulário
 - dashboard do profissional
   - quantidade de pacientes ativos
   - quantidade de pacientes desativados
@@ -10,3 +9,5 @@
     - fazer histórico de alteração de dados financeiros do paciente (task backend)
   - valor médio da sessão
   - tempo médio de sessão
+
+- ajustar isActive patiente, inserir no professionalPatient (mudar muita coisa no back), ajustar datas também

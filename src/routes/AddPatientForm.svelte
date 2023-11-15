@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Input, Label, Button } from 'flowbite-svelte';
 	import { applyAction, enhance } from '$app/forms';
-	import InputMask from '$lib/components/InputMask.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import { professional } from '$lib/stores/professional';
