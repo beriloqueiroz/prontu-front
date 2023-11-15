@@ -92,7 +92,8 @@ export const actions: Actions = {
 
     if (!zodResponse.success) {
       throw error(400, {
-        message: zodResponse.error.errors.map(err => err.message).join(", ")
+        message: zodResponse.error.errors.map(err => err.message).join(", "),
+        formDetail: zodResponse.error.errors
       });
     }
 
@@ -139,7 +140,8 @@ export const actions: Actions = {
 
     if (!zodResponse.success) {
       throw error(400, {
-        message: zodResponse.error.errors.map(err => err.message).join(", ")
+        message: zodResponse.error.errors.map(err => err.message).join(", "),
+        formDetail: zodResponse.error.errors
       });
     }
 
@@ -188,7 +190,8 @@ export const actions: Actions = {
 
     if (!zodResponse.success) {
       throw error(400, {
-        message: zodResponse.error.errors.map(err => err.message).join(", ")
+        message: zodResponse.error.errors.map(err => err.message).join(", "),
+        formDetail: zodResponse.error.errors
       });
     }
 

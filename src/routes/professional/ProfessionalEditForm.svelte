@@ -9,6 +9,7 @@
 	import InputMask from '$lib/components/InputMask.svelte';
 	import { allInstitution, getInstitutionKey } from '$lib/interface/professional/enums/institution';
 	import { Button, Input, Label, Select, Toggle } from 'flowbite-svelte';
+	import InputDocument from '$lib/components/InputDocument.svelte';
 
 	let error: string | null = null;
 	let loading = false;
@@ -75,32 +76,14 @@
 				<Label for="document" class={`mb-2 ${!isEdit ? 'text-gray-400' : 'text-gray-900'}`}
 					>Cpf</Label
 				>
-				<InputMask
-					type="text"
+				<InputDocument
 					id="document"
 					required
-					mask="000.000.000-00"
-					maskChar="_"
 					name="document"
 					disabled={!isEdit}
 					value={$professional?.document}
 				/>
 			</div>
-			<!-- <div>
-    <Label for="phone" class={`mb-2 ${!isEdit ? 'text-gray-400' : 'text-gray-900'}`}
-      >Telefone</Label
-    >
-    <InputMask
-      type="tel"
-      id="phone"
-      required
-      mask="+55 (00) 0 0000-0000"
-      size={16}
-      name="phone"
-      disabled={!isEdit}
-      value={$professional?.phone}
-    />
-  </div> -->
 			<div>
 				<h4 class={`my-1 ${!isEdit ? 'text-gray-400' : 'text-gray-900'}`}>
 					Documento profissional

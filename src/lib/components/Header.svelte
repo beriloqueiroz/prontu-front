@@ -2,14 +2,14 @@
 	import { goto } from '$app/navigation';
 	import { professional } from '$lib/stores/professional';
 	import { user } from '$lib/stores/user';
-	import { redirect } from '@sveltejs/kit';
 	import { NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	async function logout(): Promise<void> {
 		await fetch(`/api/user/logout`, {
 			method: 'DELETE'
 		});
 		user.set(null);
-		redirect(302, '/');
+		professional.set(null);
+		goto('/login');
 	}
 </script>
 

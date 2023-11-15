@@ -6,6 +6,8 @@
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import { professional } from '$lib/stores/professional';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
+	import InputPhone from '$lib/components/InputPhone.svelte';
+	import InputDocument from '$lib/components/InputDocument.svelte';
 
 	let error: string | null = null;
 	let loading = false;
@@ -43,22 +45,15 @@
 		</div>
 		<div>
 			<Label for="document" class="mb-2">Cpf</Label>
-			<InputMask
-				type="text"
-				id="document"
-				required
-				mask="000.000.000-00"
-				maskChar="_"
-				name="document"
-			/>
+			<InputDocument id="document" required name="document" />
 		</div>
 		<div>
 			<Label for="phone" class="mb-2">Telefone</Label>
-			<InputMask type="tel" id="phone" mask="+55 (00) 0 0000-0000" size={16} name="phone" />
+			<InputPhone type="tel" id="phone" name="phone" />
 		</div>
 		<div>
 			<Label for="chatPhone" class="mb-2">Whatsapp</Label>
-			<InputMask type="tel" id="chatPhone" mask="+55 (00) 0 0000-0000" size={16} name="chatPhone" />
+			<InputPhone id="chatPhone" name="chatPhone" />
 		</div>
 	</div>
 	<div class="mb-6">
