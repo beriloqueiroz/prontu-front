@@ -6,10 +6,10 @@
 	import { user } from '$lib/stores/user';
 
 	import { deserialize } from '$app/forms';
-	import InputMask from '$lib/components/InputMask.svelte';
 	import { allInstitution, getInstitutionKey } from '$lib/interface/professional/enums/institution';
 	import { Button, Input, Label, Select, Toggle } from 'flowbite-svelte';
 	import InputDocument from '$lib/components/InputDocument.svelte';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 
 	let error: string | null = null;
 	let loading = false;
@@ -25,6 +25,8 @@
 
 	async function submit(event: { currentTarget: EventTarget & HTMLFormElement }) {
 		loading = true;
+		error = null;
+		clearFormError();
 		const data = new FormData(event.currentTarget);
 
 		const response = await fetch(event.currentTarget.action, {
@@ -40,6 +42,7 @@
 		if (result.type === 'error') {
 			error = result.error.message;
 			loading = false;
+			processFormError(result);
 			return;
 		}
 

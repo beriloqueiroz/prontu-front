@@ -4,6 +4,7 @@
 	import InputMask from '$lib/components/InputMask.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 
 	let institution_selected: string;
 
@@ -18,10 +19,13 @@
 
 	async function handleRegister() {
 		loading = true;
+		error = null;
+		clearFormError();
 		return async ({ result }: any) => {
 			if (result.type === 'error') {
 				error = result.error.message;
 				loading = false;
+				processFormError(result);
 				return;
 			}
 			loading = false;

@@ -7,6 +7,7 @@
 	import { user } from '$lib/stores/user';
 	import { Button, Input, Label, Toggle } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 
 	let error: string | null = null;
 	let loading = false;
@@ -16,6 +17,8 @@
 
 	async function edit(event: { currentTarget: EventTarget & HTMLFormElement }) {
 		loading = true;
+		error = null;
+		clearFormError();
 		const data = new FormData(event.currentTarget);
 
 		const response = await fetch(event.currentTarget.action, {
@@ -30,6 +33,7 @@
 
 		if (result.type === 'error') {
 			error = result.error.message;
+			processFormError(result);
 			loading = false;
 			return;
 		}

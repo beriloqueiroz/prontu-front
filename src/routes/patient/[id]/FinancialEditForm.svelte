@@ -19,6 +19,7 @@
 		getPaymentTypeKey
 	} from '$lib/interface/professional/enums/paymentType';
 	import InputCurrency from '$lib/components/InputCurrency.svelte';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 
 	let error: string | null = null;
 	let loading = false;
@@ -37,9 +38,13 @@
 
 	async function handleEdit() {
 		loading = true;
+		error = null;
+		successMessage = null;
+		clearFormError();
 		return async ({ result }: any) => {
 			if (result.type === 'error') {
 				error = result.error.message;
+				processFormError(result);
 				loading = false;
 				return;
 			}

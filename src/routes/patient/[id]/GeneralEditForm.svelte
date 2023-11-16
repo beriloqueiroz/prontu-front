@@ -10,6 +10,7 @@
 	import { professional } from '$lib/stores/professional';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import { goto } from '$app/navigation';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 
 	let error: string | null = null;
 	let loading = false;
@@ -19,9 +20,13 @@
 
 	async function handleEdit() {
 		loading = true;
+		error = null;
+		successMessage = null;
+		clearFormError();
 		return async ({ result }: any) => {
 			if (result.type === 'error') {
 				error = result.error.message;
+				processFormError(result);
 				loading = false;
 				return;
 			}

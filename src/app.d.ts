@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import type { User } from "$lib/interface/user";
-import type { ZodInssue } from "zod/z";
+import type { ZodIssue } from 'zod';
 
 // for information about these interfaces
 declare global {
@@ -9,7 +9,7 @@ declare global {
 		interface Error {
 			message: string,
 			code?: number,
-			formDetail?: ZodInssue[]
+			formDetail?: ZodIssue[]
 		}
 		interface Locals {
 			user: User | undefined,

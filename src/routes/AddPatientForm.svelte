@@ -7,6 +7,7 @@
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import InputPhone from '$lib/components/InputPhone.svelte';
 	import InputDocument from '$lib/components/InputDocument.svelte';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 
 	let error: string | null = null;
 	let loading = false;
@@ -16,10 +17,14 @@
 
 	async function handleRegister() {
 		loading = true;
+		successMessage = null;
+		error = null;
+		clearFormError();
 		return async ({ result }: any) => {
 			if (result.type === 'error') {
 				error = result.error.message;
 				loading = false;
+				processFormError(result);
 				return;
 			}
 			loading = false;

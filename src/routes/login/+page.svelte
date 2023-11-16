@@ -3,14 +3,18 @@
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
+	import { clearFormError, processFormError } from '$lib/helpers/forms';
 	import { Input, Label, Button, A, Modal } from 'flowbite-svelte';
 	let error: string | null = null;
 	let loading = false;
 	async function handleLogin() {
 		loading = true;
+		error = null;
+		clearFormError();
 		return async ({ result }: any) => {
 			if (result.type === 'error') {
 				error = result.error.message;
+				processFormError(result);
 				loading = false;
 				return;
 			}
@@ -25,6 +29,7 @@
 	let successForgotMessage: string | null = null;
 	async function handleForgot() {
 		loadingForgot = true;
+		errorForgot = null;
 		return async ({ result }: any) => {
 			if (result.type === 'error') {
 				errorForgot = result.error.message;
