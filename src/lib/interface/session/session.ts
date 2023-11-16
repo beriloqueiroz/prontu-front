@@ -1,10 +1,11 @@
 export interface Session {
-  startDate: Date,
-  endDate?: Date,
-  timeInMinutes: number,
-  amount?: number,
+  id?: string,
   patientIds: string[],
   professionalId: string,
+  startDate: Date,
+  timeInMinutes: number,
+  amount?: number,
+  endDate?: Date,
   notes?: string,
   cid?: Cid[]
   forms?: Form[]

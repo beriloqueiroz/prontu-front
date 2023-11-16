@@ -2,6 +2,7 @@
 	import { patient } from '$lib/stores/patient.js';
 	import { Button, CloseButton, Drawer } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
+	import AddSessionForm from './AddSessionForm.svelte';
 
 	export let data;
 
@@ -35,9 +36,9 @@
 			id="drawer-label"
 			class="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400"
 		>
-			Adicionar usuário
+			Adicionar sessão
 		</h5>
 		<CloseButton on:click={() => (hideAddSession = true)} class="mb-4 dark:text-white" />
 	</div>
-	Formulário
+	<AddSessionForm />
 </Drawer>

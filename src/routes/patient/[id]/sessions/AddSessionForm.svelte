@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { Input, Label, Button } from 'flowbite-svelte';
 	import { applyAction, enhance } from '$app/forms';
-	import Spinner from '$lib/components/Spinner.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-	import { professional } from '$lib/stores/professional';
-	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
-	import InputPhone from '$lib/components/InputPhone.svelte';
 	import InputDocument from '$lib/components/InputDocument.svelte';
+	import InputPhone from '$lib/components/InputPhone.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
+	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import { clearFormError, processFormError } from '$lib/helpers/forms';
+	import { patient } from '$lib/stores/patient';
+	import { professional } from '$lib/stores/professional';
+	import { Button, Input, Label } from 'flowbite-svelte';
 
 	let error: string | null = null;
 	let loading = false;
@@ -15,7 +16,7 @@
 
 	let successMessage: string | null = null;
 
-	async function handle() {
+	async function handler() {
 		loading = true;
 		successMessage = null;
 		error = null;
@@ -28,7 +29,7 @@
 				return;
 			}
 			loading = false;
-			successMessage = 'Sucesso ao adicionar paciente!';
+			successMessage = 'Sucesso ao adicionar sessão!';
 			professional.set(result.data);
 			setTimeout(() => {
 				successMessage = null;
@@ -40,29 +41,22 @@
 	}
 </script>
 
-<form use:enhance={handle} method="POST" action="?/addPatient">
+<form use:enhance={handler} method="POST" action="?/addSession">
 	<div class="grid gap-6 mb-6 md:grid-cols-2">
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
+		<input type="hidden" value={$patient?.id} name="patientId" id="patientId" />
 		<div>
-			<Label for="name" class="mb-2">Nome completo</Label>
-			<Input type="text" id="name" placeholder="John Doe" required name="name" />
+			<Label for="startDate" class="mb-2">Data</Label>
+			<Input type="date" id="startDate" placeholder="01/01/2000" required name="startDate" />
 		</div>
 		<div>
-			<Label for="document" class="mb-2">Cpf</Label>
-			<InputDocument id="document" required name="document" />
+			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
+			<InputDocument id="timeInMinutes" required name="timeInMinutes" />
 		</div>
 		<div>
-			<Label for="phone" class="mb-2">Telefone</Label>
-			<InputPhone type="tel" id="phone" name="phone" />
+			<Label for="amount" class="mb-2">Valor</Label>
+			<InputPhone type="tel" id="amount" name="amount" />
 		</div>
-		<div>
-			<Label for="chatPhone" class="mb-2">Whatsapp</Label>
-			<InputPhone id="chatPhone" name="chatPhone" />
-		</div>
-	</div>
-	<div class="mb-6">
-		<Label for="email" class="mb-2">Email</Label>
-		<Input type="email" id="email" placeholder="john.doe@company.com" required name="email" />
 	</div>
 	<Button type="submit">
 		{#if loading}
