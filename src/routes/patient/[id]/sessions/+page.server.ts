@@ -15,7 +15,7 @@ async function getSessions(patientId: string, professionalId: string): Promise<R
     {
       id: "12354356",
       amount: 150,
-      cid: [{ name: "transtorno x", code: "A1" }],
+      cids: [{ name: "transtorno x", code: "A1" }],
       patientIds: [patientId],
       professionalId: professionalId,
       startDate: new Date()
@@ -35,7 +35,7 @@ async function addSession(session: Session): Promise<Response> {
     {
       id: "12354356",
       amount: 150,
-      cid: [{ name: "transtorno x", code: "A1" }],
+      cids: [{ name: "transtorno x", code: "A1" }],
       patientIds: session.patientIds,
       professionalId: session.professionalId,
       startDate: new Date()

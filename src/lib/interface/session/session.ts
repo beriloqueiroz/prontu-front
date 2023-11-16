@@ -7,7 +7,7 @@ export interface Session {
   amount?: number,
   endDate?: Date,
   notes?: string,
-  cid?: Cid[]
+  cids?: Cid[]
   forms?: Form[]
 }
 

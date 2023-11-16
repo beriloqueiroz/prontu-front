@@ -3,6 +3,7 @@
 	import { Button, CloseButton, Drawer } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import AddSessionForm from './AddSessionForm.svelte';
+	import CardSession from '$lib/components/CardSession.svelte';
 
 	export let data;
 
@@ -24,8 +25,7 @@
 		<p class="text-center p-1 mt-2">Nenhuma sessão!</p>
 	{:else}
 		{#each $patient.sessions as session}
-			card de sessão
-			<div>{JSON.stringify(session)}</div>
+			<CardSession {session} />
 		{/each}
 	{/if}
 </section>
