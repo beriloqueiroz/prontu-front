@@ -41,4 +41,5 @@
 		</div>
 	</div>
 	<Button on:click={() => goto(`/patient/${patient.id}`)}>Editar</Button>
+	<Button on:click={() => goto(`/patient/${patient.id}/sessions`)}>Sessões</Button>
 </Card>

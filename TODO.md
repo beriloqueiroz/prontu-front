@@ -1,6 +1,5 @@
 # TODO list
 
-- melhorar indicativo de erro nos campos de formulário
 - dashboard do profissional
   - quantidade de pacientes ativos
   - quantidade de pacientes desativados

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Patient } from '$lib/interface/professional/patient';
 
-	export let patient: Patient;
 	import { Input, Label, Button, Toggle } from 'flowbite-svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import InputMask from '$lib/components/InputMask.svelte';
@@ -11,10 +10,11 @@
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import { goto } from '$app/navigation';
 	import { clearFormError, processFormError } from '$lib/helpers/forms';
+	import { patient } from '$lib/stores/patient';
 
 	let error: string | null = null;
 	let loading = false;
-	let isActive = patient.isActive;
+	let isActive = $patient.isActive;
 
 	let successMessage: string | null = null;
 
@@ -32,8 +32,8 @@
 			}
 			loading = false;
 			successMessage = 'Sucesso ao editar paciente!';
-			patient = result.data;
-			professional.changePatient(patient);
+			patient.set(result.data);
+			professional.changePatient($patient);
 			await applyAction(result);
 		};
 	}
@@ -44,7 +44,7 @@
 		<Toggle class="mb-2" bind:checked={isActive}>{isActive ? 'Ativado' : 'Desativado'}</Toggle>
 		<input type="hidden" value={isActive} name="isActive" id="isActive" />
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
-		<input type="hidden" value={patient.id} name="id" id="id" />
+		<input type="hidden" value={$patient.id} name="id" id="id" />
 		<div>
 			<Label for="name" class="mb-2">Nome completo</Label>
 			<Input
@@ -53,7 +53,7 @@
 				placeholder="John Doe"
 				required
 				name="name"
-				value={patient.name}
+				value={$patient.name}
 			/>
 		</div>
 		<div>
@@ -65,7 +65,7 @@
 				mask="000.000.000-00"
 				maskChar="_"
 				name="document"
-				value={patient.document}
+				value={$patient.document}
 			/>
 		</div>
 		<div>
@@ -76,7 +76,7 @@
 				mask="+55 (00) 0 0000-0000"
 				size={16}
 				name="phone"
-				value={patient.phones.find((ph) => !ph.isChat)?.value}
+				value={$patient.phones.find((ph) => !ph.isChat)?.value}
 			/>
 		</div>
 		<div>
@@ -87,7 +87,7 @@
 				mask="+55 (00) 0 0000-0000"
 				size={16}
 				name="chatPhone"
-				value={patient.phones.find((ph) => ph.isChat)?.value}
+				value={$patient.phones.find((ph) => ph.isChat)?.value}
 			/>
 		</div>
 	</div>
@@ -99,7 +99,7 @@
 			placeholder="john.doe@company.com"
 			required
 			name="email"
-			value={patient.email}
+			value={$patient.email}
 		/>
 	</div>
 	<Button type="submit">

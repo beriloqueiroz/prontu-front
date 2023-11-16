@@ -1,21 +1,20 @@
 <script lang="ts">
+	import { patient } from '$lib/stores/patient';
 	import { TabItem, Tabs } from 'flowbite-svelte';
-	import GeneralEditForm from './GeneralEditForm.svelte';
-	import type { Patient } from '$lib/interface/professional/patient';
 	import FinancialEditForm from './FinancialEditForm.svelte';
+	import GeneralEditForm from './GeneralEditForm.svelte';
 	import PersonalEditForm from './PersonalEditForm.svelte';
-	export let data: { patient: Patient };
 </script>
 
-<h3 class="my-2 text-center">Paciente {data.patient.name}</h3>
-<Tabs class="flex justify-center flex-nowrap">
-	<TabItem open title="Informações gerais">
-		<GeneralEditForm patient={data.patient} />
+<h3 class="my-2 text-center">Paciente {$patient?.name}</h3>
+<Tabs class="flex justify-center">
+	<TabItem open title="Geral">
+		<GeneralEditForm />
 	</TabItem>
 	<TabItem title="Financeiro">
-		<FinancialEditForm patient={data.patient} />
+		<FinancialEditForm />
 	</TabItem>
 	<TabItem title="Pessoais">
-		<PersonalEditForm patient={data.patient} />
+		<PersonalEditForm />
 	</TabItem>
 </Tabs>

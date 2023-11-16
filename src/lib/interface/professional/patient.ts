@@ -1,3 +1,4 @@
+import type { Session } from "../session/session";
 import type { FinancialInfo } from "./financialInfo";
 import type { PersonalForm } from "./personalForm";
 
@@ -10,7 +11,8 @@ export interface Patient {
   financialInfo: FinancialInfo,
   personalForm: PersonalForm,
   phones: Phone[],
-  avatar: string
+  avatar: string,
+  sessions?: Session[]
 }
 
 export interface Phone { value: string, isChat: boolean }
