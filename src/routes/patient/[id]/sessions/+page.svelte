@@ -18,7 +18,7 @@
 	let hideAddSession = true;
 </script>
 
-<section class="flex flex-col">
+<section class="flex flex-col justify-center">
 	<h3 class="my-2 text-center">Sessões</h3>
 	<Button on:click={() => (hideAddSession = false)}>Adicionar Sessão!</Button>
 	{#if $patient.sessions == null || $patient.sessions?.length === 0}

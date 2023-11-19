@@ -8,7 +8,7 @@
 	export let patient: Patient;
 </script>
 
-<Card class="my-2 gap-2 flex flex-col relative">
+<Card class="my-2 gap-2 flex flex-col relative mx-auto w-full">
 	<div class="flex justify-between">
 		<div>
 			<h3 class="font-bold">{patient.name}</h3>

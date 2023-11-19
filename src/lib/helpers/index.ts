@@ -92,3 +92,8 @@ export function isValidUuid(value: string) {
   const regex = new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
   return (regex.test(value));
 }
+
+export function formatDate(date: Date | undefined | null) {
+  if (!date) return ''
+  return date.toLocaleString('en-GB').replaceAll(",", "");
+}

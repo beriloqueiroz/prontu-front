@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import DateInput from '$lib/components/DateInput.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-	import InputDocument from '$lib/components/InputDocument.svelte';
-	import InputPhone from '$lib/components/InputPhone.svelte';
+	import InputCurrency from '$lib/components/InputCurrency.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
+	import { formatDate } from '$lib/helpers';
 	import { clearFormError, processFormError } from '$lib/helpers/forms';
 	import { patient } from '$lib/stores/patient';
 	import { professional } from '$lib/stores/professional';
@@ -47,15 +48,25 @@
 		<input type="hidden" value={$patient?.id} name="patientId" id="patientId" />
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<Input type="date" id="startDate" placeholder="01/01/2000" required name="startDate" />
+			<DateInput id="startDate" required name="startDate" value={formatDate(new Date())} />
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
-			<InputDocument id="timeInMinutes" required name="timeInMinutes" />
+			<Input
+				type="number"
+				id="timeInMinutes"
+				required
+				name="timeInMinutes"
+				value={$patient.financialInfo?.estimatedTimeSessionInMinutes || 50}
+			/>
 		</div>
 		<div>
 			<Label for="amount" class="mb-2">Valor</Label>
-			<InputPhone type="tel" id="amount" name="amount" />
+			<InputCurrency
+				id="amount"
+				name="amount"
+				value={$patient.financialInfo?.defaultSessionPrice}
+			/>
 		</div>
 	</div>
 	<Button type="submit">

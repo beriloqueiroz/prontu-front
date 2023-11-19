@@ -18,7 +18,8 @@ async function getSessions(patientId: string, professionalId: string): Promise<R
       cids: [{ name: "transtorno x", code: "A1" }],
       patientIds: [patientId],
       professionalId: professionalId,
-      startDate: new Date()
+      startDate: new Date(),
+      timeInMinutes: 50
     }
   ]) as Session[]
   return patientResponse as Response;

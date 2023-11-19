@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import DateInput from '$lib/components/DateInput.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import InputCurrency from '$lib/components/InputCurrency.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import Trash from '$lib/components/Trash.svelte';
+	import { formatDate } from '$lib/helpers';
 	import { clearFormError, processFormError } from '$lib/helpers/forms';
 	import type { Patient } from '$lib/interface/professional/patient';
 	import type { Cid, Form, Session } from '$lib/interface/session/session';
@@ -14,6 +16,8 @@
 	export let session: Session;
 	export let runAfterSubmit: () => void = () => {};
 	export let possiblesCids: Cid[];
+
+	let innerWidth = 0;
 
 	let error: string | null = null;
 	let loading = false;
@@ -160,14 +164,7 @@
 		</div>
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<Input
-				type="date"
-				id="startDate"
-				placeholder="01/01/2000"
-				required
-				name="startDate"
-				value={session.startDate}
-			/>
+			<DateInput id="startDate" required name="startDate" value={formatDate(session.startDate)} />
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
@@ -185,20 +182,9 @@
 		</div>
 		<div>
 			<Label for="endDate" class="mb-2">Data de fim</Label>
-			<Input
-				type="date"
-				id="endDate"
-				placeholder="01/01/2000"
-				required
-				name="endDate"
-				value={session.endDate}
-			/>
+			<DateInput id="endDate" required name="endDate" value={formatDate(session.endDate)} />
 		</div>
-		<div>
-			<Label for="notes" class="mb-2">Notas</Label>
-			<Textarea type="text" id="notes" name="notes" bind:value={notes} rows="4" />
-			<input type="hidden" value={notes} name="notes" id="notes" />
-		</div>
+
 		<div>
 			<Label for="forms" class="mb-2 text-lg">Formulários</Label>
 			<div class="flex flex-col gap-1">
@@ -263,6 +249,12 @@
 			{/each}
 			<Button class="my-1 w-full" on:click={() => (cids = [...cids, emptyCid])}>Incluir</Button>
 			<input type="hidden" value={cids} name="cids" id="cids" />
+		</div>
+
+		<div>
+			<Label for="notes" class="mb-2">Notas</Label>
+			<Textarea type="text" id="notes" name="notes" bind:value={notes} rows="7" />
+			<input type="hidden" value={notes} name="notes" id="notes" />
 		</div>
 	</div>
 	<Button type="submit">
