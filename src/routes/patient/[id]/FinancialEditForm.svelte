@@ -64,9 +64,9 @@
 			<InputCurrency
 				id="defaultSessionPrice"
 				required
-				placeholder="R$ 150,00"
+				placeholder="R$ 150"
 				name="defaultSessionPrice"
-				value={$patient.financialInfo?.defaultSessionPrice?.toFixed(2).replaceAll('.', ',')}
+				value={$patient.financialInfo?.defaultSessionPrice.toString()}
 			/>
 		</div>
 		<div>

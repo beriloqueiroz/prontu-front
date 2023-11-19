@@ -11,7 +11,7 @@
 <Card class="my-2 gap-2 flex flex-col relative mx-auto w-full">
 	{#each session.patientIds as patientId}
 		<div>
-			<p>{$professional?.patients.find((p) => p.id === patientId)?.name}</p>
+			<p>{$professional?.patients?.find((p) => p.id === patientId)?.name}</p>
 		</div>
 	{/each}
 	<div class="flex">

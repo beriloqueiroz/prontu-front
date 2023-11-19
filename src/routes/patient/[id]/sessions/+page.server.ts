@@ -1,4 +1,4 @@
-import { isValidUuid } from '$lib/helpers';
+import { currencyToNumber, dateBrToIsoDate, isValidUuid } from '$lib/helpers';
 import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from '../../../../app';
 import type { Session } from '$lib/interface/session/session';
@@ -70,18 +70,32 @@ export async function load({ params, locals }: PageServerLoad) {
   return { sessions: response };
 }
 
-const addPatientSchema = z.object({
+const addSessionSchema = z.object({
   professionalId: z.string().uuid(),
-  patientIds: z.string().uuid().array(),
-  amount: z.coerce.number().nullable().transform(v => v || 0),
+  patientIds: z.string().uuid({ message: "Paciente inválido!" }).array(),
+  amount: z.string().transform(currencyToNumber),
   startDate: z.coerce.date(),
   timeInMinutes: z.coerce.number().nullable().transform(v => v || 0)
 });
 
+interface ObjetcEntries {
+  professionalId: string,
+  patientIds: string | string[],
+  startDate: string,
+  timeInMinutes: string | number,
+  amount: string | number
+}
+
 export const actions: Actions = {
   addSession: async ({ request }) => {
     const data = await request.formData();
-    const zodResponse = addPatientSchema.safeParse(Object.fromEntries(data));
+
+    const objects = Object.fromEntries(data) as unknown as ObjetcEntries;
+    objects.patientIds = (objects.patientIds as string).split(",");
+
+    objects.startDate = dateBrToIsoDate(objects.startDate);
+
+    const zodResponse = addSessionSchema.safeParse(objects);
 
     if (!zodResponse.success) {
       throw error(400, {

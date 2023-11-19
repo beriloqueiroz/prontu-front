@@ -1,3 +1,4 @@
+import type { Patient } from "$lib/interface/professional/patient";
 import type { ZodIssue } from "zod";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,4 +23,11 @@ export function clearFormError() {
     element?.classList.remove('border-red-600');
     element?.classList.remove('border-2');
   });
+}
+
+export function simplePatient(patient: Patient | undefined) {
+  if (!patient) {
+    return ``;
+  }
+  return `${patient?.id.substring(0, 4)} - ${patient?.name}`;
 }

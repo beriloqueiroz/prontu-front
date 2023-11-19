@@ -45,7 +45,7 @@
 <form use:enhance={handler} method="POST" action="?/addSession">
 	<div class="grid gap-6 mb-6 md:grid-cols-2">
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
-		<input type="hidden" value={$patient?.id} name="patientId" id="patientId" />
+		<input type="hidden" value={[$patient?.id]} name="patientIds" id="patientIds" />
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
 			<DateInput id="startDate" required name="startDate" value={formatDate(new Date())} />

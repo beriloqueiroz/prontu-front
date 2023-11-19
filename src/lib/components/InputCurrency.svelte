@@ -5,18 +5,14 @@
 
 	export let value;
 
-	let mask = value ? maskByValue(value) : 'R$ 000';
+	let mask = 'R$ 0000';
 	const handleChange = ({ detail }) => {
-		const sizeNumber = detail.inputState.unmaskedValue.length;
-		if (sizeNumber >= 1) {
-			mask = `R$ ${Array(sizeNumber + 3).join('0')}`;
+		if (detail.inputState.unmaskedValue.length > 3) {
+			mask = `R$ ${Array(detail.inputState.unmaskedValue.length + 1).join('0')}`;
+			return;
 		}
-		value = detail.inputState.unmaskedValue;
+		mask = 'R$ 0000';
 	};
-
-	function maskByValue(value) {
-		return `R$ ${Array(value.toString().split('.')[0].length - 1).join('0')}`;
-	}
 </script>
 
 <InputMask

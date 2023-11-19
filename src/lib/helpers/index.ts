@@ -97,3 +97,14 @@ export function formatDate(date: Date | undefined | null) {
   if (!date) return ''
   return date.toLocaleString('en-GB').replaceAll(",", "");
 }
+
+export function dateBrToIsoDate(dateBr: string): string {
+  const firstSplittedDate = dateBr.split("/");
+  const day = firstSplittedDate[0];
+  const month = firstSplittedDate[1];
+  const secondSplittedDate = firstSplittedDate[2].split(" ");
+  const year = secondSplittedDate[0];
+  const hourMinutes = secondSplittedDate[1];
+  const isoDate = `${year}-${month}-${day}T${hourMinutes}`;
+  return isoDate;
+}

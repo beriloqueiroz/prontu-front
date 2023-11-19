@@ -7,7 +7,7 @@
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import Trash from '$lib/components/Trash.svelte';
 	import { formatDate } from '$lib/helpers';
-	import { clearFormError, processFormError } from '$lib/helpers/forms';
+	import { clearFormError, processFormError, simplePatient } from '$lib/helpers/forms';
 	import type { Patient } from '$lib/interface/professional/patient';
 	import type { Cid, Form, Session } from '$lib/interface/session/session';
 	import { professional } from '$lib/stores/professional';
@@ -16,8 +16,6 @@
 	export let session: Session;
 	export let runAfterSubmit: () => void = () => {};
 	export let possiblesCids: Cid[];
-
-	let innerWidth = 0;
 
 	let error: string | null = null;
 	let loading = false;
@@ -59,13 +57,6 @@
 			}, 2000);
 			await applyAction(result);
 		};
-	}
-
-	function simplePatient(patient: Patient | undefined) {
-		if (!patient) {
-			return ``;
-		}
-		return `${patient?.id.substring(0, 4)} - ${patient?.name}`;
 	}
 
 	function changeCidCode(e: Event, i: number) {
