@@ -23,19 +23,20 @@ async function getSessionById(id: string): Promise<Response> {
     status: 200,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any
-  patientResponse.json = () => ([
+  patientResponse.json = () => (
     {
       id,
       amount: 150,
-      cids: [{ name: "transtorno x", code: "A1" }],
-      patientIds: ["12365478"],
-      professionalId: "12635468",
+      cids: [{ name: "transtorno x", code: "A01" }, { name: "transtorno Y", code: "A02" }],
+      patientIds: ["36176df2-829d-4d9d-9f46-6c6b0c6c0fa5"],
+      professionalId: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
       startDate: new Date(),
       endDate: new Date(),
       timeInMinutes: 50,
-      notes: "esse é perturbado"
+      notes: "esse é perturbado",
+      forms: [{ link: "www.doido.com.br", name: "anamnese" }]
     }
-  ]) as Session[]
+  ) as Session
   return patientResponse as Response;
 }
 
@@ -43,10 +44,10 @@ export async function load({ params, locals }: PageServerLoad) {
   const professionalId = locals.user?.username;
   const sessionId = params.id;
   if (!professionalId) {
-    throw error(401, { message: "Erro ao buscar paciente" });
+    throw error(401, { message: "Erro ao buscar sessão" });
   }
   if (!isValidUuid(sessionId)) {
-    throw error(404, { message: "Erro ao buscar paciente" });
+    throw error(404, { message: "Erro ao buscar sessão" });
   }
   const patientResponse = await getSessionById(sessionId)
 
@@ -59,7 +60,7 @@ export async function load({ params, locals }: PageServerLoad) {
 
   const response = await patientResponse.json();
 
-  return { patient: response };
+  return { session: response };
 }
 
 export const actions: Actions = {
@@ -119,18 +120,19 @@ async function changeSession(session: Session): Promise<Response> {
     status: 200,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any
-  patientResponse.json = () => ([
+  patientResponse.json = () => (
     {
       id: session.id,
       amount: 150,
-      cids: [{ name: "transtorno x", code: "A1" }],
-      patientIds: ["12365478"],
-      professionalId: "12635468",
+      cids: [{ name: "transtorno x", code: "A1" }, { name: "transtorno Y", code: "A2" }],
+      patientIds: ["36176df2-829d-4d9d-9f46-6c6b0c6c0fa5"],
+      professionalId: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
       startDate: new Date(),
       endDate: new Date(),
       timeInMinutes: 50,
-      notes: "esse é perturbado"
+      notes: "esse é perturbado",
+      forms: [{ link: "www.doido.com.br", name: "anamnese" }]
     }
-  ]) as Session[]
+  ) as Session
   return patientResponse as Response;
 }

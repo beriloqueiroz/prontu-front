@@ -13,7 +13,7 @@ async function getSessions(patientId: string, professionalId: string): Promise<R
   } as any
   patientResponse.json = () => ([
     {
-      id: "12354356",
+      id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
       amount: 150,
       cids: [{ name: "transtorno x", code: "A1" }],
       patientIds: [patientId],
@@ -33,7 +33,7 @@ async function addSession(session: Session): Promise<Response> {
   patientResponse.json = () => ([
     session,
     {
-      id: "12354356",
+      id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
       amount: 150,
       cids: [{ name: "transtorno x", code: "A1" }],
       patientIds: session.patientIds,

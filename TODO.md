@@ -1,5 +1,17 @@
 # TODO list
 
+- endpoints sessão
+  - get by id
+  - list by professionalId
+  - list by professionalId e patientId
+  - insert
+    - by patient (unique patientId)
+    - by professional (multiples patientId)
+  - update
+    - by patient (only add patient, not remove original, can remove others)
+    - by professional (only add patient, not remove original)
+  - remove
+
 - dashboard do profissional
   - quantidade de pacientes ativos
   - quantidade de pacientes desativados

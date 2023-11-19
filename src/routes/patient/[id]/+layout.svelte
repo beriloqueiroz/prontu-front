@@ -5,6 +5,4 @@
 	$: patient.set(data.patient);
 </script>
 
-<section class="flex flex-col">
-	<slot />
-</section>
+<slot />

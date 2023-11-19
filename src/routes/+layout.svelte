@@ -19,5 +19,5 @@
 		<slot />
 	</main>
 
-	<Footer class="w-100 p-2 m-auto" />
+	<Footer class="flex justify-center flex-col text-center" />
 </div>

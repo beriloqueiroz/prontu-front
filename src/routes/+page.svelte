@@ -24,28 +24,26 @@
 	<meta name="description" content="app" />
 </svelte:head>
 
-<section>
-	<Tabs class="flex justify-center flex-nowrap">
-		<TabItem open title="Pacientes">
-			<div class="w-100 flex justify-center flex-col gap-2">
-				<Button on:click={() => (hideAddPatient = false)}>Adicionar Paciente!</Button>
-				{#if $professional?.patients?.length === 0}
-					<p class="text-center p-1 mt-2">Nenhum usuário cadastrado!</p>
-				{:else}
-					<form id="example-form" on:submit={submitted}>
-						<Search bind:value={searchValue} placeholder="buscar pelo nome" />
-					</form>
-				{/if}
-			</div>
-			{#if $professional != null}
-				{#each $professional.patients.filter((pat) => pat.name.includes(searchValue)) as patient}
-					<PatientCard {patient} />
-				{/each}
+<Tabs class="flex justify-center flex-nowrap">
+	<TabItem open title="Pacientes">
+		<div class="flex justify-center flex-col gap-2">
+			<Button on:click={() => (hideAddPatient = false)}>Adicionar Paciente!</Button>
+			{#if $professional?.patients?.length === 0}
+				<p class="text-center p-1 mt-2">Nenhum usuário cadastrado!</p>
+			{:else}
+				<form id="example-form" on:submit={submitted}>
+					<Search bind:value={searchValue} placeholder="buscar pelo nome" />
+				</form>
 			{/if}
-		</TabItem>
-		<TabItem title="Sessões">Em breve</TabItem>
-	</Tabs>
-</section>
+		</div>
+		{#if $professional != null}
+			{#each $professional.patients.filter((pat) => pat.name.includes(searchValue)) as patient}
+				<PatientCard {patient} />
+			{/each}
+		{/if}
+	</TabItem>
+	<TabItem title="Sessões">Em breve</TabItem>
+</Tabs>
 
 <Drawer transitionType="fly" {transitionParams} bind:hidden={hideAddPatient} id="sidebar3">
 	<div class="flex items-center">
