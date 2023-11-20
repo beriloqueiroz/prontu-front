@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import CardSession from '$lib/components/CardSession.svelte';
 	import PatientCard from '$lib/components/PatientCard.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
@@ -7,11 +8,18 @@
 	import { Button, CloseButton, Drawer, Search, TabItem, Tabs } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import AddPatientForm from './AddPatientForm.svelte';
-	import { goto } from '$app/navigation';
 	import AddSessionForm from './AddSessionForm.svelte';
+	import { onMount } from 'svelte';
+
+	let isSession = false;
+
+	onMount(() => (isSession = window.location.hash === '#session'));
 
 	let hideAddPatient = true;
 	let hideAddSession = true;
+
+	let offset = 0;
+	let limit = 50;
 
 	let transitionParams = {
 		x: -320,
@@ -20,22 +28,28 @@
 	};
 
 	let searchValue = '';
+	let searchSessionValue = '';
 
-	const submitted = () => {
-		alert(`You are searching: ${searchValue}`);
-	};
+	$: patientsFound = $professional?.patients.filter((pat) => pat.name.includes(searchValue)) || [];
+	$: patientsFoundToSession =
+		$professional?.patients
+			.filter((pat) => pat.name.includes(searchSessionValue))
+			.map((p) => p.id) || [];
 
 	async function getSessions(): Promise<Session[]> {
 		const id = $professional?.id;
 		if (!id) {
 			goto('/login');
 		}
-		const response = await fetch(`${location.protocol}//${location.host}/api/session`, {
-			method: 'GET',
-			headers: {
-				professionalId: `${id}`
+		const response = await fetch(
+			`${location.protocol}//${location.host}/api/session?limit=${limit}&offset=${offset}`,
+			{
+				method: 'GET',
+				headers: {
+					professionalId: `${id}`
+				}
 			}
-		});
+		);
 		return await response.json();
 	}
 </script>
@@ -46,24 +60,22 @@
 </svelte:head>
 
 <Tabs class="flex justify-center flex-nowrap">
-	<TabItem open title="Pacientes">
+	<TabItem open={!isSession} title="Pacientes">
 		<div class="flex justify-center flex-col gap-2">
 			<Button on:click={() => (hideAddPatient = false)}>Adicionar Paciente!</Button>
 			{#if $professional?.patients?.length === 0}
 				<p class="text-center p-1 mt-2">Nenhum usuário cadastrado!</p>
 			{:else}
-				<form id="example-form" on:submit={submitted}>
-					<Search bind:value={searchValue} placeholder="buscar pelo nome" />
-				</form>
+				<Search bind:value={searchValue} placeholder="buscar pelo nome" />
 			{/if}
 		</div>
 		{#if $professional != null}
-			{#each $professional.patients.filter((pat) => pat.name.includes(searchValue)) as patient}
+			{#each patientsFound as patient}
 				<PatientCard {patient} />
 			{/each}
 		{/if}
 	</TabItem>
-	<TabItem title="Sessões">
+	<TabItem open={isSession} title="Sessões">
 		{#await getSessions()}
 			<Spinner />
 		{:then sessions}
@@ -72,15 +84,11 @@
 				{#if sessions?.length === 0}
 					<p class="text-center p-1 mt-2">Nenhuma sessão cadastrado!</p>
 				{:else}
-					<form id="example-form" on:submit={submitted}>
-						<Search bind:value={searchValue} placeholder="buscar pelo nome do paciente" />
-					</form>
+					<Search bind:value={searchSessionValue} placeholder="buscar pelo nome do paciente" />
 				{/if}
 			</div>
 			{#if sessions != null && $professional?.patients}
-				{#each sessions.filter((s) => s.patientIds.some((id) => $professional?.patients
-							.map((p) => p.id)
-							.includes(id))) as session}
+				{#each sessions.filter( (s) => s.patientIds.some( (pi) => patientsFoundToSession.includes(pi) ) ) as session}
 					<CardSession {session} />
 				{/each}
 			{/if}

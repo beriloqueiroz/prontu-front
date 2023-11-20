@@ -3,10 +3,10 @@
 
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import type { User } from '$lib/interface/user/user';
-	import { user } from '$lib/stores/user';
-	import { professional } from '$lib/stores/professional';
 	import type { Professional } from '$lib/interface/professional/professional';
+	import type { User } from '$lib/interface/user/user';
+	import { professional } from '$lib/stores/professional';
+	import { user } from '$lib/stores/user';
 	export let data: { user: User; professional: Professional };
 	$: user.set(data.user);
 	$: professional.set(data.professional);

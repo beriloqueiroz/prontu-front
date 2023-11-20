@@ -5,14 +5,15 @@ import { http } from "$lib/server/http/server";
 
 export const GET: RequestHandler = async ({ url, request }): Promise<Response> => {
   const id = request.headers.get("professionalId")
-  // const response: Response = await http.request(`${URL_BASE_BACKEND}/session`, {
+  const limit = url.searchParams.get("limit");
+  const offset = url.searchParams.get("offset");
+  // const response: Response = await http.request(`${URL_BASE_BACKEND}/session?limit=${limit}&offset={offset}`, {
   //   method: 'GET',
   //   headers: {
   //     "content-type": "application/json",
   //     "accept": "application/json",
   //     "professionalId": `${id}`,
-  //   },
-  //   body: JSON.stringify({ professionalId: id })
+  //   }
   // });
   // if (!response.ok) {
   //   throw error(response.status, {
