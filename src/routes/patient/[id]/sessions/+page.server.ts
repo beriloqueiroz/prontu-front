@@ -7,26 +7,27 @@ import { http } from '$lib/server/http/server';
 import { URL_BASE_SESSION } from '$env/static/private';
 
 //change real
-async function getSessions(patientId: string, professionalId: string): Promise<Response> {
-  const patientResponse = {
-    ok: true,
-    status: 200,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any
-  patientResponse.json = () => ([
-    {
-      Id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
-      Amount: 150,
-      Cids: [{ name: "transtorno x", code: "A1" }],
-      Patients: [{ PatientId: patientId }],
-      Professionals: [{ ProfessionalId: professionalId }],
-      StartDate: new Date(),
-      TimeInMinutes: 50,
-      Location: "alsndals",
-      Origin: "none"
+async function getSessions(patientId: string, professionalId: string): Promise<Session[]> {
+  const response = await http.request(`${URL_BASE_SESSION}/sessions`);
+  if (!response.ok) {
+    let errors = { title: "" }
+    try {
+      errors = await response.json();
+    } catch (err) {
+      const errorsStr = await response.text();
+      throw error(response.status, {
+        message: errorsStr
+      });
     }
-  ]) as unknown as Session[]
-  return patientResponse as Response;
+    throw error(response.status, {
+      message: errors.title
+    });
+  }
+
+  const responseJson = await response.json();
+  console.log("🚀 ~ file: +page.server.ts:28 ~ getSessions ~ responseJson:", responseJson)
+
+  return responseJson;
 }
 
 async function addSession(session: Session): Promise<Session> {
@@ -70,19 +71,9 @@ export async function load({ params, locals }: PageServerLoad) {
     throw error(404, { message: "Erro ao buscar paciente" });
   }
 
-  const patientResponse = await getSessions(patientId, professionalId);
+  const sessions = await getSessions(patientId, professionalId);
 
-
-  if (!patientResponse.ok) {
-    const errors = await patientResponse.json();
-    throw error(patientResponse.status, {
-      message: errors.title
-    });
-  }
-
-  const response = await patientResponse.json();
-
-  return { sessions: response };
+  return { sessions };
 }
 
 const addSessionSchema = z.object({
