@@ -3,6 +3,8 @@ import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from '../../../../app';
 import type { Session } from '$lib/interface/session/session';
 import { z } from 'zod';
+import { http } from '$lib/server/http/server';
+import { URL_BASE_SESSION } from '$env/static/private';
 
 //change real
 async function getSessions(patientId: string, professionalId: string): Promise<Response> {
@@ -13,36 +15,49 @@ async function getSessions(patientId: string, professionalId: string): Promise<R
   } as any
   patientResponse.json = () => ([
     {
-      id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
-      amount: 150,
-      cids: [{ name: "transtorno x", code: "A1" }],
-      patientIds: [patientId],
-      professionalId: professionalId,
-      startDate: new Date(),
-      timeInMinutes: 50
+      Id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
+      Amount: 150,
+      Cids: [{ name: "transtorno x", code: "A1" }],
+      Patients: [{ PatientId: patientId }],
+      Professionals: [{ ProfessionalId: professionalId }],
+      StartDate: new Date(),
+      TimeInMinutes: 50,
+      Location: "alsndals",
+      Origin: "none"
     }
-  ]) as Session[]
+  ]) as unknown as Session[]
   return patientResponse as Response;
 }
 
-async function addSession(session: Session): Promise<Response> {
-  const patientResponse = {
-    ok: true,
-    status: 200,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any
-  patientResponse.json = () => ([
-    session,
-    {
-      id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
-      amount: 150,
-      cids: [{ name: "transtorno x", code: "A1" }],
-      patientIds: session.patientIds,
-      professionalId: session.professionalId,
-      startDate: new Date()
+async function addSession(session: Session): Promise<Session> {
+  const response = await http.request(`${URL_BASE_SESSION}/sessions`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(
+      session
+    )
+  });
+
+  if (!response.ok) {
+    let errors = { title: "" }
+    try {
+      errors = await response.json();
+    } catch (err) {
+      const errorsStr = await response.text();
+      throw error(response.status, {
+        message: errorsStr
+      });
     }
-  ]) as Session[]
-  return patientResponse as Response;
+    throw error(response.status, {
+      message: errors.title
+    });
+  }
+
+  const responseJson = await response.json();
+
+  return responseJson;
 }
 
 export async function load({ params, locals }: PageServerLoad) {
@@ -75,7 +90,8 @@ const addSessionSchema = z.object({
   patientIds: z.string().uuid({ message: "Paciente inválido!" }).array(),
   amount: z.string().transform(currencyToNumber),
   startDate: z.coerce.date(),
-  timeInMinutes: z.coerce.number().nullable().transform(v => v || 0)
+  timeInMinutes: z.coerce.number().nullable().transform(v => v || 0),
+  location: z.string().min(3, { message: "Digite um local válido" })
 });
 
 interface ObjetcEntries {
@@ -83,7 +99,8 @@ interface ObjetcEntries {
   patientIds: string | string[],
   startDate: string,
   timeInMinutes: string | number,
-  amount: string | number
+  amount: string | number,
+  location: string
 }
 
 export const actions: Actions = {
@@ -104,19 +121,19 @@ export const actions: Actions = {
       });
     }
 
-    const { professionalId, patientIds, amount, startDate, timeInMinutes } = zodResponse.data;
+    const { professionalId, patientIds, amount, startDate, timeInMinutes, location } = zodResponse.data;
 
-    const response = await addSession({ professionalId, patientIds, amount, startDate, timeInMinutes });
-
-    if (!response.ok) {
-      const errors = await response.json();
-      throw error(response.status, {
-        message: errors.title
+    const response = await addSession(
+      {
+        Professionals: [{ ProfessionalId: professionalId }],
+        Patients: patientIds.map(p => ({ PatientId: p })),
+        Amount: amount,
+        StartDate: startDate,
+        TimeInMinutes: timeInMinutes,
+        Location: location,
+        Origin: "none"
       });
-    }
 
-    const responseJson = await response.json();
-
-    return responseJson;
+    return response;
   }
 };

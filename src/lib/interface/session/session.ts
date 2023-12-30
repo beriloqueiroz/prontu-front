@@ -1,14 +1,25 @@
 export interface Session {
-  id?: string,
-  patientIds: string[],
-  professionalId: string,
-  startDate: Date,
-  timeInMinutes: number,
-  amount?: number,
-  endDate?: Date,
-  notes?: string,
-  cids?: Cid[]
-  forms?: Form[]
+  Id?: string,
+  Patients: PatientSession[],
+  Professionals: ProfessionalSession[],
+  StartDate: Date,
+  TimeInMinutes: number,
+  Amount?: number,
+  EndDate?: Date,
+  Notes?: string,
+  Cids?: string,
+  Forms?: string,
+  Origin: string,
+  ExternalId?: string,
+  Location: string
+}
+
+export interface PatientSession {
+  PatientId: string
+}
+
+export interface ProfessionalSession {
+  ProfessionalId: string
 }
 
 export interface Cid {
