@@ -50,7 +50,6 @@
 				}
 			}
 		);
-		console.log('🚀 ~ file: +page.svelte:53 ~ getSessions ~ response:', response);
 		const resp = await response.json();
 		return resp;
 	}

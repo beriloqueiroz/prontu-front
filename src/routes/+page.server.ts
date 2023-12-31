@@ -1,4 +1,4 @@
-import { URL_BASE_BACKEND } from '$env/static/private';
+import { URL_BASE_BACKEND, URL_BASE_SESSION } from '$env/static/private';
 import { currencyToNumber, dateBrToIsoDate, isValidCPF } from '$lib/helpers';
 import type { Phone } from '$lib/interface/professional/patient';
 import type { Session } from '$lib/interface/session/session';
@@ -20,27 +20,39 @@ const addSessionSchema = z.object({
   patientIds: z.string().uuid({ message: "Paciente inválido!" }).array(),
   amount: z.string().transform(currencyToNumber),
   startDate: z.coerce.date(),
-  timeInMinutes: z.coerce.number().nullable().transform(v => v || 0)
+  timeInMinutes: z.coerce.number().nullable().transform(v => v || 0),
+  location: z.string().min(3, { message: "Digite um local válido" })
 });
 
-async function addSession(session: Session): Promise<Response> {
-  const patientResponse = {
-    ok: true,
-    status: 200,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any
-  patientResponse.json = () => ([
-    session,
-    {
-      id: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
-      amount: 150,
-      cids: [{ name: "transtorno x", code: "A1" }],
-      patientIds: session.patientIds,
-      professionalId: session.professionalId,
-      startDate: new Date()
+async function addSession(session: Session): Promise<Session> {
+  const response = await http.request(`${URL_BASE_SESSION}/sessions`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(
+      session
+    )
+  });
+
+  if (!response.ok) {
+    let errors = { title: "" }
+    try {
+      errors = await response.json();
+    } catch (err) {
+      const errorsStr = await response.text();
+      throw error(response.status, {
+        message: errorsStr
+      });
     }
-  ]) as Session[]
-  return patientResponse as Response;
+    throw error(response.status, {
+      message: errors.title
+    });
+  }
+
+  const responseJson = await response.json();
+
+  return responseJson;
 }
 
 interface ObjetcEntries {
@@ -115,19 +127,19 @@ export const actions: Actions = {
       });
     }
 
-    const { professionalId, patientIds, amount, startDate, timeInMinutes } = zodResponse.data;
+    const { professionalId, patientIds, amount, startDate, timeInMinutes, location } = zodResponse.data;
 
-    const response = await addSession({ professionalId, patientIds, amount, startDate, timeInMinutes });
-
-    if (!response.ok) {
-      const errors = await response.json();
-      throw error(response.status, {
-        message: errors.title
+    const response = await addSession(
+      {
+        Professionals: [{ ProfessionalId: professionalId }],
+        Patients: patientIds.map(p => ({ PatientId: p })),
+        Amount: amount,
+        StartDate: startDate,
+        TimeInMinutes: timeInMinutes,
+        Location: location,
+        Origin: "none"
       });
-    }
 
-    const responseJson = await response.json();
-
-    return responseJson;
+    return response;
   }
 };

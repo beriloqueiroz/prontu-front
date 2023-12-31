@@ -17,6 +17,8 @@
 	export let runAfterSubmit: () => void = () => {};
 
 	let successMessage: string | null = null;
+	let now = new Date();
+	now.setTime(now.getTime() + 2 * 60 * 60 * 1000);
 
 	async function handler() {
 		loading = true;
@@ -121,7 +123,7 @@
 		</div>
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<DateInput id="startDate" required name="startDate" value={formatDate(new Date())} />
+			<DateInput id="startDate" required name="startDate" value={formatDate(now)} />
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
@@ -139,8 +141,12 @@
 				id="amount"
 				name="amount"
 				required
-				value={patients[0]?.financialInfo?.defaultSessionPrice || '100'}
+				value={patients[0]?.financialInfo?.defaultSessionPrice || '300'}
 			/>
+		</div>
+		<div>
+			<Label for="location" class="mb-2">Localização</Label>
+			<Input id="location" name="location" value="remoto" />
 		</div>
 	</div>
 	<Button type="submit">

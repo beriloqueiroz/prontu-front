@@ -1,14 +1,16 @@
 import type { Patient } from "$lib/interface/professional/patient";
 import type { Professional } from "$lib/interface/professional/professional";
+import type { Session } from "$lib/interface/session/session";
 import { writable } from "svelte/store";
 
-const { subscribe, set, update } = writable<Professional | null>(null);
+const { subscribe, set, update } = writable<Professional>();
 
 export const professional = {
   subscribe,
   set,
   update,
-  changePatient
+  changePatient,
+  addSession
 }
 
 function changePatient(patient: Patient) {
@@ -17,6 +19,13 @@ function changePatient(patient: Patient) {
       p.patients = p?.patients.filter(pat => pat.id === patient.id) ?? [];
       p?.patients.push(patient);
     }
+    return p;
+  })
+}
+
+function addSession(session: Session) {
+  update(p => {
+    p.sessions = [...p.sessions, session]
     return p;
   })
 }

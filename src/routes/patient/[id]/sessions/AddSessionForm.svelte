@@ -33,7 +33,7 @@
 			}
 			loading = false;
 			successMessage = 'Sucesso ao adicionar sessão!';
-			professional.set(result.data);
+			professional.addSession(result.data);
 			setTimeout(() => {
 				successMessage = null;
 				error = null;
@@ -67,7 +67,7 @@
 			<InputCurrency
 				id="amount"
 				name="amount"
-				value={$patient.financialInfo?.defaultSessionPrice}
+				value={$patient.financialInfo?.defaultSessionPrice || '300'}
 			/>
 		</div>
 		<div>

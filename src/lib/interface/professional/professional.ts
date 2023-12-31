@@ -9,7 +9,7 @@ export interface Professional {
   professionalDocumentInstitution: string,
   email: string,
   patients: Patient[],
-  sessions?: Session[]
+  sessions: Session[]
 }
 
 export type ProfessionalRecord = Record<
