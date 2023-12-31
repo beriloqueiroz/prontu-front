@@ -50,7 +50,9 @@
 				}
 			}
 		);
-		return await response.json();
+		console.log('🚀 ~ file: +page.svelte:53 ~ getSessions ~ response:', response);
+		const resp = await response.json();
+		return resp;
 	}
 </script>
 
@@ -88,7 +90,7 @@
 				{/if}
 			</div>
 			{#if sessions != null && $professional?.patients}
-				{#each sessions.filter( (s) => s.patientIds.some( (pi) => patientsFoundToSession.includes(pi) ) ) as session}
+				{#each sessions.filter( (s) => s.Patients.some( (pi) => patientsFoundToSession.includes(pi.PatientId) ) ) as session}
 					<CardSession {session} />
 				{/each}
 			{/if}

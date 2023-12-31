@@ -8,7 +8,7 @@ import { URL_BASE_SESSION } from '$env/static/private';
 
 //change real
 async function getSessions(patientId: string, professionalId: string): Promise<Session[]> {
-  const response = await http.request(`${URL_BASE_SESSION}/sessions`);
+  const response = await http.request(`${URL_BASE_SESSION}/sessions/professional/${professionalId}/${patientId}`);
   if (!response.ok) {
     let errors = { title: "" }
     try {
@@ -25,7 +25,6 @@ async function getSessions(patientId: string, professionalId: string): Promise<S
   }
 
   const responseJson = await response.json();
-  console.log("🚀 ~ file: +page.server.ts:28 ~ getSessions ~ responseJson:", responseJson)
 
   return responseJson;
 }
