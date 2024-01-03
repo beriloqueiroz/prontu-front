@@ -34,6 +34,9 @@
 			}
 			loading = false;
 			successMessage = 'Sucesso ao adicionar sessão!';
+			professional.addSession(result.data);
+			patients = [undefined];
+
 			setTimeout(() => {
 				successMessage = null;
 				error = null;

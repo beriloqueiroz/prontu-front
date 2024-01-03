@@ -10,7 +10,9 @@ export const professional = {
   set,
   update,
   changePatient,
-  addSession
+  addSession,
+  removeSession,
+  populateSessions
 }
 
 function changePatient(patient: Patient) {
@@ -26,6 +28,20 @@ function changePatient(patient: Patient) {
 function addSession(session: Session) {
   update(p => {
     p.sessions = [...p.sessions, session]
+    return p;
+  })
+}
+
+function populateSessions(sessions: Session[]) {
+  update(p => {
+    p.sessions = sessions
+    return p;
+  })
+}
+
+function removeSession(id: string | undefined) {
+  update(p => {
+    p.sessions = p.sessions.filter(s => s?.Id !== id)
     return p;
   })
 }

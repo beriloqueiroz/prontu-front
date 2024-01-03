@@ -13,7 +13,13 @@
 
 	let isSession = false;
 
-	onMount(() => (isSession = window.location.hash === '#session'));
+	let sessions: Session[] = [];
+
+	$: sessions = $professional.sessions;
+
+	onMount(async () => {
+		isSession = window.location.hash === '#session';
+	});
 
 	let hideAddPatient = true;
 	let hideAddSession = true;
@@ -51,6 +57,7 @@
 			}
 		);
 		const resp = await response.json();
+		professional.populateSessions(resp);
 		return resp;
 	}
 </script>
@@ -79,7 +86,7 @@
 	<TabItem open={isSession} title="Sessões">
 		{#await getSessions()}
 			<Spinner />
-		{:then sessions}
+		{:then _}
 			<div class="flex justify-center flex-col gap-2">
 				<Button on:click={() => (hideAddSession = false)}>Adicionar Sessão!</Button>
 				{#if sessions?.length === 0}

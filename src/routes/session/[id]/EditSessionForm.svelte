@@ -19,13 +19,14 @@
 
 	let error: string | null = null;
 	let loading = false;
-	let notes = session.notes || '';
-	let forms: Form[] = session.forms || [];
-	let cids: Cid[] = session.cids || [];
+	let notes = session.Notes || '';
+	let forms: Form[] = session.Forms || [];
+	let cids: Cid[] = session.Cids || [];
 	let emptyCid: Cid = { code: '', name: '', observation: '' };
 	let emptyForm: Form = { link: '', name: '' };
 	let patients =
-		session.patientIds.map((sp) => $professional?.patients.find((p) => p.id === sp)) || [];
+		session?.Patients?.map((sp) => $professional?.patients.find((p) => p.id === sp.PatientId)) ||
+		[];
 
 	$: patientIds = patients.map((p) => p?.id);
 
@@ -155,7 +156,7 @@
 		</div>
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<DateInput id="startDate" required name="startDate" value={formatDate(session.startDate)} />
+			<DateInput id="startDate" required name="startDate" value={formatDate(session.StartDate)} />
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
@@ -163,7 +164,7 @@
 				id="timeInMinutes"
 				required
 				name="timeInMinutes"
-				value={session.timeInMinutes}
+				value={session.TimeInMinutes}
 				type="number"
 			/>
 		</div>

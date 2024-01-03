@@ -6,6 +6,24 @@
 	import { Button, Card } from 'flowbite-svelte';
 
 	export let session: Session;
+
+	async function deleteSession(id: string | undefined): Promise<void> {
+		const professionalId = $professional?.id;
+		if (!professionalId) {
+			goto('/login');
+		}
+		const response = await fetch(`${location.protocol}//${location.host}/api/session/${id}`, {
+			method: 'DELETE',
+			headers: {
+				professionalId: `${professionalId}`
+			}
+		});
+		const resp = await response.json();
+		if (response.ok) {
+			professional.removeSession(id);
+		}
+		return resp;
+	}
 </script>
 
 <Card class="my-2 gap-2 flex flex-col relative mx-auto w-full">
@@ -22,5 +40,8 @@
 		<h3>Tempo:</h3>
 		<p>{session.TimeInMinutes}</p>
 	</div>
-	<Button type="button" on:click={() => goto(`/session/${session.Id}`)}>Acessar</Button>
+	<div class="flex justify-between">
+		<Button type="button" on:click={() => goto(`/session/${session.Id}`)}>Acessar</Button>
+		<Button type="button" on:click={() => deleteSession(session.Id)}>Excluir</Button>
+	</div>
 </Card>

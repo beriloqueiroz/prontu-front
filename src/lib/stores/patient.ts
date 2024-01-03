@@ -8,12 +8,37 @@ export const patient = {
   subscribe,
   set,
   update,
-  updateSessions
+  updateSessions,
+  removeSession,
+  addSession,
+  populateSessions
 }
 
 function updateSessions(sessions: Session[]) {
   update(p => {
     p.sessions = sessions;
+    return p;
+  })
+}
+
+function removeSession(id: string | undefined) {
+  update(p => {
+    p.sessions = p.sessions?.filter(s => s?.Id !== id)
+    return p;
+  })
+}
+
+function addSession(session: Session) {
+  update(p => {
+    if (p?.sessions)
+      p.sessions = [...p.sessions, session]
+    return p;
+  })
+}
+
+function populateSessions(sessions: Session[]) {
+  update(p => {
+    p.sessions = sessions
     return p;
   })
 }
