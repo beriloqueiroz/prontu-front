@@ -6,10 +6,10 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import Trash from '$lib/components/Trash.svelte';
-	import { formatDate } from '$lib/helpers';
+	import { formatDateToBR } from '$lib/helpers';
 	import { clearFormError, processFormError, simplePatient } from '$lib/helpers/forms';
 	import type { Patient } from '$lib/interface/professional/patient';
-	import type { Cid, Form, Session } from '$lib/interface/session/session';
+	import type { Cid, Session } from '$lib/interface/session/session';
 	import { professional } from '$lib/stores/professional';
 	import { Button, Input, Label, Textarea } from 'flowbite-svelte';
 
@@ -20,10 +20,8 @@
 	let error: string | null = null;
 	let loading = false;
 	let notes = session.Notes || '';
-	let forms: Form[] = session.Forms || [];
-	let cids: Cid[] = session.Cids || [];
+	let cids: Cid[] = session.CidsSvelte || [];
 	let emptyCid: Cid = { code: '', name: '', observation: '' };
-	let emptyForm: Form = { link: '', name: '' };
 	let patients =
 		session?.Patients?.map((sp) => $professional?.patients.find((p) => p.id === sp.PatientId)) ||
 		[];
@@ -50,7 +48,6 @@
 			}
 			loading = false;
 			successMessage = 'Sucesso ao adicionar sessão!';
-			professional.set(result.data);
 			setTimeout(() => {
 				successMessage = null;
 				error = null;
@@ -99,6 +96,7 @@
 <form use:enhance={handler} method="POST" action="?/editSession">
 	<div class="grid gap-6 mb-6 md:grid-cols-2">
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
+		<input type="hidden" value={session.Id} name="id" id="id" />
 		<input type="hidden" value={patientIds} name="patientIds" id="patientIds" />
 		<div class="flex flex-col gap-1">
 			<div class="flex flex-col">
@@ -156,7 +154,12 @@
 		</div>
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<DateInput id="startDate" required name="startDate" value={formatDate(session.StartDate)} />
+			<DateInput
+				id="startDate"
+				required
+				name="startDate"
+				value={formatDateToBR(session.StartDate)}
+			/>
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
@@ -170,49 +173,11 @@
 		</div>
 		<div>
 			<Label for="amount" class="mb-2">Valor</Label>
-			<InputCurrency id="amount" name="amount" value={session.amount} />
+			<InputCurrency id="amount" name="amount" value={'R$ ' + session.Amount} />
 		</div>
 		<div>
 			<Label for="endDate" class="mb-2">Data de fim</Label>
-			<DateInput id="endDate" required name="endDate" value={formatDate(session.endDate)} />
-		</div>
-
-		<div>
-			<Label for="forms" class="mb-2 text-lg">Formulários</Label>
-			<div class="flex flex-col gap-1">
-				<div class="flex gap-1">
-					<p class="w-1/3">Nome</p>
-					<p class="w-3/4">Fonte/link</p>
-					<p />
-				</div>
-				{#each forms as form, i}
-					<div class="flex gap-1">
-						<Input
-							class="w-1/3"
-							type="text"
-							id={`formsName_${i}`}
-							name={`formsName_${i}`}
-							value={form.name}
-						/>
-						<Input
-							class="w-3/4"
-							type="text"
-							id={`formsLink_${i}`}
-							name={`formsLink_${i}`}
-							value={form.link}
-						/>
-						<button
-							class="m-auto flex flex-col justify-center"
-							type="button"
-							on:click={() => (forms = [...forms.filter((_, j) => i !== j)])}
-						>
-							<Trash />
-						</button>
-					</div>
-				{/each}
-			</div>
-			<Button class="my-1 w-full" on:click={() => (forms = [...forms, emptyForm])}>Incluir</Button>
-			<input type="hidden" value={forms} name="forms" id="forms" />
+			<DateInput id="endDate" name="endDate" value={formatDateToBR(session.EndDate)} />
 		</div>
 
 		<div>
@@ -240,7 +205,11 @@
 				</div>
 			{/each}
 			<Button class="my-1 w-full" on:click={() => (cids = [...cids, emptyCid])}>Incluir</Button>
-			<input type="hidden" value={cids} name="cids" id="cids" />
+			<input type="hidden" value={JSON.stringify(cids)} name="cids" id="cids" />
+		</div>
+		<div>
+			<Label for="location" class="mb-2">Localização</Label>
+			<Input id="location" name="location" value="remoto" />
 		</div>
 
 		<div>
@@ -253,7 +222,7 @@
 		{#if loading}
 			<Spinner class="my-1 mx-3" size="3" color="white" />
 		{:else}
-			Adicionar
+			Salvar
 		{/if}
 	</Button>
 	<ErrorMessage show={!!error} message={error} />

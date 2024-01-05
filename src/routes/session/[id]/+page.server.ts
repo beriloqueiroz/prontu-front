@@ -1,43 +1,52 @@
-import { isValidUuid } from '$lib/helpers';
+import { currencyToNumber, isValidUuid, scapeJsonStringfy } from '$lib/helpers';
 import type { Session } from '$lib/interface/session/session';
 import { error, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { PageServerLoad } from '../../../app';
+import { http } from '$lib/server/http/server';
+import { URL_BASE_SESSION } from '$env/static/private';
 
 const editSession = z.object({
   professionalId: z.string().uuid(),
   id: z.string().uuid(),
-  patientIds: z.string().uuid().array(),
-  amount: z.coerce.number().nullable().transform(v => v || 0),
+  patientIds: z.string(),
+  amount: z.string().transform(currencyToNumber),
   startDate: z.coerce.date(),
-  endDate: z.coerce.date().nullable(),
+  endDate: z.string().transform(date => new Date(date)),
   notes: z.string().nullable(),
   timeInMinutes: z.coerce.number().nullable().transform(v => v || 0),
-  cids: z.object({ code: z.string(), name: z.string(), observations: z.string() }).array(),
-  forms: z.object({ name: z.string(), link: z.string() }).array(),
+  cids: z.string().nullable(),
+  location: z.string().min(3, { message: "Digite um local válido" })
 });
 
-async function getSessionById(id: string): Promise<Response> {
-  const patientResponse = {
-    ok: true,
-    status: 200,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any
-  patientResponse.json = () => (
-    {
-      id,
-      amount: 150,
-      cids: [{ name: "transtorno x", code: "A01" }, { name: "transtorno Y", code: "A02" }],
-      patientIds: ["36176df2-829d-4d9d-9f46-6c6b0c6c0fa5"],
-      professionalId: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
-      startDate: new Date(),
-      endDate: new Date(),
-      timeInMinutes: 50,
-      notes: "esse é perturbado",
-      forms: [{ link: "www.doido.com.br", name: "anamnese" }]
+async function getSessionById(id: string, professionalId: string): Promise<Session> {
+  const response = await http.request(`${URL_BASE_SESSION}/sessions/${id}`, {
+    headers: {
+      professionalId
     }
-  ) as Session
-  return patientResponse as Response;
+  });
+  if (!response.ok) {
+    let errors = { title: "" }
+    try {
+      errors = await response.json();
+    } catch (err) {
+      const errorsStr = await response.text();
+      throw error(response.status, {
+        message: errorsStr
+      });
+    }
+    throw error(response.status, {
+      message: errors.title
+    });
+  }
+
+  const session = await response.json();
+
+  if (session.Cids) {
+    session.CidsSvelte = JSON.parse(JSON.parse(session.Cids))
+  }
+
+  return session;
 }
 
 export async function load({ params, locals }: PageServerLoad) {
@@ -49,18 +58,9 @@ export async function load({ params, locals }: PageServerLoad) {
   if (!isValidUuid(sessionId)) {
     throw error(404, { message: "Erro ao buscar sessão" });
   }
-  const patientResponse = await getSessionById(sessionId)
+  const session = await getSessionById(sessionId, professionalId)
 
-  if (!patientResponse.ok) {
-    const errors = await patientResponse.json();
-    throw error(patientResponse.status, {
-      message: errors.title
-    });
-  }
-
-  const response = await patientResponse.json();
-
-  return { session: response };
+  return { session };
 }
 
 export const actions: Actions = {
@@ -85,54 +85,55 @@ export const actions: Actions = {
       endDate,
       timeInMinutes,
       notes,
-      forms
+      location
     } = zodResponse.data;
 
     const response = await changeSession({
-      id,
-      amount,
-      cids: cids.map(c => ({ ...c })),
-      patientIds,
-      professionalId,
-      startDate,
-      endDate: endDate || undefined,
-      timeInMinutes,
-      notes: notes || undefined,
-      forms: forms.map(f => ({ ...f }))
-    });
+      Id: id,
+      Professionals: [{ ProfessionalId: professionalId }],
+      Patients: patientIds.split(",").map(p => ({ PatientId: p })),
+      Amount: amount,
+      StartDate: startDate,
+      TimeInMinutes: timeInMinutes,
+      Location: location,
+      Origin: "none",
+      EndDate: endDate || undefined,
+      Notes: notes || undefined,
+      Cids: cids || undefined,
+    }, professionalId);
 
-    if (!response.ok) {
-      const errors = await response.json();
-      throw error(response.status, {
-        message: errors.title
-      });
-    }
-
-    const responseJson = await response.json();
-
-    return responseJson;
+    return response;
   }
 };
 
-async function changeSession(session: Session): Promise<Response> {
-  const patientResponse = {
-    ok: true,
-    status: 200,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any
-  patientResponse.json = () => (
-    {
-      id: session.id,
-      amount: 150,
-      cids: [{ name: "transtorno x", code: "A1" }, { name: "transtorno Y", code: "A2" }],
-      patientIds: ["36176df2-829d-4d9d-9f46-6c6b0c6c0fa5"],
-      professionalId: "56fdd5a3-2f17-4b32-b9af-e0dd720a5e98",
-      startDate: new Date(),
-      endDate: new Date(),
-      timeInMinutes: 50,
-      notes: "esse é perturbado",
-      forms: [{ link: "www.doido.com.br", name: "anamnese" }]
+async function changeSession(session: Session, professionalId: string): Promise<Session> {
+  const response = await http.request(`${URL_BASE_SESSION}/sessions/${session.Id}`, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+      professionalId
+    },
+    body: JSON.stringify(
+      session
+    )
+  });
+
+  if (!response.ok) {
+    let errors = { title: "" }
+    try {
+      errors = await response.json();
+    } catch (err) {
+      const errorsStr = await response.text();
+      throw error(response.status, {
+        message: errorsStr
+      });
     }
-  ) as Session
-  return patientResponse as Response;
+    throw error(response.status, {
+      message: errors.title
+    });
+  }
+
+  const responseJson = await response.json();
+
+  return responseJson;
 }

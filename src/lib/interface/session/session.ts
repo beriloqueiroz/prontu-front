@@ -11,7 +11,8 @@ export interface Session {
   Forms?: string,
   Origin: string,
   ExternalId?: string,
-  Location: string
+  Location: string,
+  CidsSvelte?: Cid[]
 }
 
 export interface PatientSession {
@@ -26,9 +27,4 @@ export interface Cid {
   code: string,
   name: string,
   observation?: string,
-}
-
-export interface Form {
-  name: string,
-  link: string,
 }

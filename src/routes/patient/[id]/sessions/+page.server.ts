@@ -24,9 +24,15 @@ async function getSessions(patientId: string, professionalId: string): Promise<S
     });
   }
 
-  const responseJson = await response.json();
+  const sessions = await response.json() as Session[];
 
-  return responseJson;
+  sessions.forEach(s => {
+    if (s.Cids) {
+      s.CidsSvelte = JSON.pars(JSON.parse(s.Cids))
+    }
+  })
+
+  return sessions;
 }
 
 async function addSession(session: Session): Promise<Session> {

@@ -28,7 +28,7 @@ async function addSession(session: Session): Promise<Session> {
   const response = await http.request(`${URL_BASE_SESSION}/sessions`, {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
     body: JSON.stringify(
       session

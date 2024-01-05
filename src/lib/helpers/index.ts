@@ -93,9 +93,21 @@ export function isValidUuid(value: string) {
   return (regex.test(value));
 }
 
-export function formatDate(date: Date | undefined | null) {
-  if (!date) return ''
-  return date.toLocaleString('en-GB').replaceAll(",", "");
+export function formatDateToBR(dateIn: Date | undefined | null | string) {
+  if (!dateIn) return ''
+
+  if (typeof dateIn == 'string') {
+    const firstSplittedDate = dateIn.split("-");
+    const year = firstSplittedDate[0];
+    if (year == '0000') return ''
+    const month = firstSplittedDate[1];
+    // const z = firstSplittedDate[3]
+    const secondSplittedDate = firstSplittedDate[2].split("T");
+    const day = secondSplittedDate[0];
+    const hourMinutes = secondSplittedDate[1];
+    return `${day}/${month}/${year} ${hourMinutes}`
+  }
+  return dateIn.toLocaleString('en-GB').replaceAll(",", "");
 }
 
 export function dateBrToIsoDate(dateBr: string): string {
@@ -107,4 +119,15 @@ export function dateBrToIsoDate(dateBr: string): string {
   const hourMinutes = secondSplittedDate[1];
   const isoDate = `${year}-${month}-${day}T${hourMinutes}`;
   return isoDate;
+}
+
+export function scapeJsonStringfy(myJSONString: string) {
+  return myJSONString.replace(/\\n/g, "\\n")
+    .replace(/\\'/g, "\\'")
+    .replace(/\\"/g, '\\"')
+    .replace(/\\&/g, "\\&")
+    .replace(/\\r/g, "\\r")
+    .replace(/\\t/g, "\\t")
+    .replace(/\\b/g, "\\b")
+    .replace(/\\f/g, "\\f");
 }

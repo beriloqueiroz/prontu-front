@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { formatDate } from '$lib/helpers';
+	import { formatDateToBR } from '$lib/helpers';
 	import type { Session } from '$lib/interface/session/session';
 	import { professional } from '$lib/stores/professional';
 	import { Button, Card } from 'flowbite-svelte';
@@ -34,7 +34,7 @@
 	{/each}
 	<div class="flex">
 		<h3>Data:</h3>
-		<p>{formatDate(session.StartDate)}</p>
+		<p>{formatDateToBR(session.StartDate)}</p>
 	</div>
 	<div class="flex">
 		<h3>Tempo:</h3>

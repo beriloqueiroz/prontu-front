@@ -5,7 +5,7 @@
 	import InputCurrency from '$lib/components/InputCurrency.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
-	import { formatDate } from '$lib/helpers';
+	import { formatDateToBR } from '$lib/helpers';
 	import { clearFormError, processFormError } from '$lib/helpers/forms';
 	import { patient } from '$lib/stores/patient';
 	import { professional } from '$lib/stores/professional';
@@ -50,7 +50,7 @@
 		<input type="hidden" value={[$patient?.id]} name="patientIds" id="patientIds" />
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<DateInput id="startDate" required name="startDate" value={formatDate(now)} />
+			<DateInput id="startDate" required name="startDate" value={formatDateToBR(now)} />
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>

@@ -6,7 +6,7 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import SuccessMessage from '$lib/components/SuccessMessage.svelte';
 	import Trash from '$lib/components/Trash.svelte';
-	import { formatDate } from '$lib/helpers';
+	import { formatDateToBR } from '$lib/helpers';
 	import { clearFormError, processFormError, simplePatient } from '$lib/helpers/forms';
 	import type { Patient } from '$lib/interface/professional/patient';
 	import { professional } from '$lib/stores/professional';
@@ -126,7 +126,7 @@
 		</div>
 		<div>
 			<Label for="startDate" class="mb-2">Data</Label>
-			<DateInput id="startDate" required name="startDate" value={formatDate(now)} />
+			<DateInput id="startDate" required name="startDate" value={formatDateToBR(now)} />
 		</div>
 		<div>
 			<Label for="timeInMinutes" class="mb-2">Tempo em minutos</Label>
