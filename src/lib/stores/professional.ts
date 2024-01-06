@@ -3,7 +3,7 @@ import type { Professional } from "$lib/interface/professional/professional";
 import type { Session } from "$lib/interface/session/session";
 import { writable } from "svelte/store";
 
-const { subscribe, set, update } = writable<Professional>();
+const { subscribe, set, update } = writable<Professional | null>();
 
 export const professional = {
   subscribe,
