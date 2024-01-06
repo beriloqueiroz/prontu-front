@@ -4,10 +4,13 @@
 	import { sineIn } from 'svelte/easing';
 	import AddSessionForm from './AddSessionForm.svelte';
 	import CardSession from '$lib/components/CardSession.svelte';
+	import { onMount } from 'svelte';
 
 	export let data;
 
-	patient.updateSessions(data.sessions);
+	onMount(() => {
+		patient.updateSessions(data.sessions);
+	});
 
 	let transitionParams = {
 		x: -320,

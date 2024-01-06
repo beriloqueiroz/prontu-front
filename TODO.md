@@ -1,9 +1,6 @@
 # TODO list
 
 - endpoints sessão
-  - get by id
-  - list by professionalId
-  - list by professionalId e patientId
   - insert
     - by patient (unique patientId)
     - by professional (multiples patientId)

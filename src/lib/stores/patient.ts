@@ -23,7 +23,8 @@ function updateSessions(sessions: Session[]) {
 
 function removeSession(id: string | undefined) {
   update(p => {
-    p.sessions = p.sessions?.filter(s => s?.Id !== id)
+    if (p.sessions)
+      p.sessions = p.sessions?.filter(s => s?.Id !== id)
     return p;
   })
 }

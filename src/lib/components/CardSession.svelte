@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { formatDateToBR } from '$lib/helpers';
 	import type { Session } from '$lib/interface/session/session';
+	import { patient } from '$lib/stores/patient';
 	import { professional } from '$lib/stores/professional';
 	import { Button, Card } from 'flowbite-svelte';
 
@@ -21,6 +22,7 @@
 		const resp = await response.json();
 		if (response.ok) {
 			professional.removeSession(id);
+			patient.removeSession(id);
 		}
 		return resp;
 	}
