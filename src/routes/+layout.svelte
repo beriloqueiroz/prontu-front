@@ -12,7 +12,7 @@
 	$: professional.set(data.professional);
 </script>
 
-<div class="app p-0 flex flex-col h-screen justify-between">
+<div class="app p-0 flex flex-col h-screen justify-between md:max-w-[90%] md:mx-auto">
 	<Header class="p-2" />
 
 	<main class="mb-auto w-100 mt-3 p-2">

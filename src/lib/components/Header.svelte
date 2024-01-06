@@ -24,11 +24,13 @@
 		<NavUl hidden={!$general?.showMenu}>
 			<NavLi href="/">Inicio</NavLi>
 			{#if $user}
-				<NavLi on:click={() => goto('/professional')}>Minhas informações</NavLi>
-				<NavLi on:click={logout}>Sair</NavLi>
+				<NavLi class="cursor-pointer" on:click={() => goto('/professional')}
+					>Minhas informações</NavLi
+				>
+				<NavLi class="cursor-pointer" on:click={logout}>Sair</NavLi>
 			{:else}
-				<NavLi href="/login">Entrar</NavLi>
-				<NavLi href="/register">Cadastrar-se</NavLi>
+				<NavLi class="cursor-pointer" href="/login">Entrar</NavLi>
+				<NavLi class="cursor-pointer" href="/register">Cadastrar-se</NavLi>
 			{/if}
 		</NavUl>
 	</div>

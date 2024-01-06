@@ -69,7 +69,7 @@
 
 <Tabs class="flex justify-center flex-nowrap">
 	<TabItem open={!isSession} title="Pacientes">
-		<div class="flex justify-center flex-col gap-2">
+		<div class="flex justify-center flex-col gap-2 md:max-w-3xl md:mx-auto">
 			<Button on:click={() => (hideAddPatient = false)}>Adicionar Paciente!</Button>
 			{#if $professional?.patients?.length === 0}
 				<p class="text-center p-1 mt-2">Nenhum usuário cadastrado!</p>
@@ -77,17 +77,19 @@
 				<Search bind:value={searchValue} placeholder="buscar pelo nome" />
 			{/if}
 		</div>
-		{#if $professional != null}
-			{#each patientsFound as patient}
-				<PatientCard {patient} />
-			{/each}
-		{/if}
+		<div class="flex flex-col md:flex-row justify-center items-center">
+			{#if $professional != null}
+				{#each patientsFound as patient}
+					<PatientCard {patient} />
+				{/each}
+			{/if}
+		</div>
 	</TabItem>
 	<TabItem open={isSession} title="Sessões">
 		{#await getSessions()}
 			<Spinner />
 		{:then _}
-			<div class="flex justify-center flex-col gap-2">
+			<div class="flex justify-center flex-col gap-2 md:max-w-3xl md:mx-auto">
 				<Button on:click={() => (hideAddSession = false)}>Adicionar Sessão!</Button>
 				{#if sessions?.length === 0}
 					<p class="text-center p-1 mt-2">Nenhuma sessão cadastrado!</p>
@@ -95,11 +97,13 @@
 					<Search bind:value={searchSessionValue} placeholder="buscar pelo nome do paciente" />
 				{/if}
 			</div>
-			{#if sessions != null && $professional?.patients}
-				{#each sessions.filter( (s) => s.Patients.some( (pi) => patientsFoundToSession.includes(pi.PatientId) ) ) as session}
-					<CardSession {session} />
-				{/each}
-			{/if}
+			<div class="flex flex-col md:flex-row justify-center flex-wrap items-center">
+				{#if sessions != null && $professional?.patients}
+					{#each sessions.filter( (s) => s.Patients.some( (pi) => patientsFoundToSession.includes(pi.PatientId) ) ) as session}
+						<CardSession {session} />
+					{/each}
+				{/if}
+			</div>
 		{/await}
 	</TabItem>
 </Tabs>

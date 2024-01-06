@@ -5,6 +5,7 @@
 	import { patient } from '$lib/stores/patient';
 	import { professional } from '$lib/stores/professional';
 	import { Button, Card } from 'flowbite-svelte';
+	import Trash from './Trash.svelte';
 
 	export let session: Session;
 
@@ -28,7 +29,7 @@
 	}
 </script>
 
-<Card class="my-2 gap-2 flex flex-col relative mx-auto w-full">
+<Card class="my-2 gap-2 flex flex-col relative mx-1 w-full min-w-[300px]">
 	{#each session.Patients as patientId}
 		<div>
 			<p>{$professional?.patients?.find((p) => p.id === patientId?.PatientId)?.name}</p>
@@ -44,6 +45,6 @@
 	</div>
 	<div class="flex justify-between">
 		<Button type="button" on:click={() => goto(`/session/${session.Id}`)}>Acessar</Button>
-		<Button type="button" on:click={() => deleteSession(session.Id)}>Excluir</Button>
+		<Button color="light" type="button" on:click={() => deleteSession(session.Id)}>Excluir</Button>
 	</div>
 </Card>
