@@ -1,4 +1,4 @@
-import { currencyToNumber, isValidUuid, scapeJsonStringfy } from '$lib/helpers';
+import { currencyToNumber, isValidUuid, jsonIsOk } from '$lib/helpers';
 import type { Session } from '$lib/interface/session/session';
 import { error, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -42,8 +42,12 @@ async function getSessionById(id: string, professionalId: string): Promise<Sessi
 
   const session = await response.json();
 
-  if (session.Cids) {
-    session.CidsSvelte = JSON.parse(JSON.parse(session.Cids))
+  if (session.Cids && jsonIsOk(session.Cids)) {
+    const cids = JSON.parse(session.Cids)
+    if (typeof cids !== 'object') {
+      session.CidsSvelte = JSON.parse(cids)
+    }
+    session.CidsSvelte = JSON.parse(session.Cids)
   }
 
   return session;

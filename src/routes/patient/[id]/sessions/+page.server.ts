@@ -28,7 +28,11 @@ async function getSessions(patientId: string, professionalId: string): Promise<S
 
   sessions.forEach(s => {
     if (s.Cids) {
-      s.CidsSvelte = JSON.parse(JSON.parse(s.Cids))
+      const cids = JSON.parse(s.Cids)
+      if (typeof cids !== 'object') {
+        s.CidsSvelte = JSON.parse(cids)
+      }
+      s.CidsSvelte = JSON.parse(s.Cids)
     }
   })
 

@@ -3,14 +3,19 @@ import { URL_BASE_AUTH, URL_BASE_BACKEND } from '$env/static/private';
 import { http } from '$lib/server/http/server';
 import { z } from 'zod';
 import { isValidCPF, isValidPassword } from '$lib/helpers';
-import { allInstitution } from '$lib/interface/professional/enums/institution';
+import { Institution } from '$lib/interface/professional/enums/institution';
 
 const registerProfessionalSchema = z.object({
   name: z.string().trim().min(3, { message: "Email deve conter mais do que 3 caracteres" }),
   email: z.string().trim().email({ message: "Email inválido" }).min(1),
   document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
   professionalDocument: z.string().min(3, { message: "Insira um documento profissional válido!" }),
-  professionalDocumentInstitution: z.enum([allInstitution[0].toString(), ...allInstitution.map(elem => elem.toString())]),
+  professionalDocumentInstitution: z.nativeEnum(Institution,
+    {
+      errorMap: () => {
+        return { message: "Selecione uma instituição!" }
+      }
+    }),
   password: z.custom((val) => typeof val === "string" ? isValidPassword(val).success : false, (val) => ({ message: isValidPassword(val).errors })),
   rePassword: z.string(),
 }).refine((data) => data.password === data.rePassword, {
