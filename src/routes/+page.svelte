@@ -15,7 +15,7 @@
 
 	let sessions: Session[] = [];
 
-	$: sessions = $professional.sessions;
+	$: sessions = $professional?.sessions || [];
 
 	onMount(async () => {
 		isSession = window.location.hash === '#session';

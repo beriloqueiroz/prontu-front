@@ -10,7 +10,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npm run build
+ARG BASE_URL
+ARG ORIGIN
+RUN  HOST=$BASE_URL ORIGIN=$ORIGIN PORT=3000 npm run build
 
 # Production image
 FROM node:16-alpine

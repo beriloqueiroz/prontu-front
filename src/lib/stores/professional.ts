@@ -34,6 +34,11 @@ function addSession(session: Session) {
 
 function populateSessions(sessions: Session[]) {
   update(p => {
+    if (!p) return p;
+    if (!sessions?.length) {
+      p.sessions = []
+      return p
+    }
     p.sessions = sessions
     return p;
   })

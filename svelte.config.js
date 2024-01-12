@@ -5,7 +5,11 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 const config = {
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		csrf: {
+      checkOrigin: false
+      // checkOrigin: process.env.NODE_ENV === 'development' ? false : true
+    }
 	}
 };
 
