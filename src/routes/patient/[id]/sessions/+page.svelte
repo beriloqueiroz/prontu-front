@@ -23,14 +23,22 @@
 
 <section class="flex flex-col justify-center">
 	<h3 class="my-2 text-center">Sessões</h3>
-	<Button on:click={() => (hideAddSession = false)}>Adicionar Sessão!</Button>
-	{#if $patient.sessions == null || $patient.sessions?.length === 0}
-		<p class="text-center p-1 mt-2">Nenhuma sessão!</p>
-	{:else}
-		{#each $patient.sessions as session}
-			<CardSession {session} />
-		{/each}
-	{/if}
+	<div class="w-fit flex justify-center flex-col gap-2 md:max-w-3xl md:mx-auto">
+		<button
+			type="button"
+			class="w-fit text-center font-medium focus-within:ring-4 focus-within:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-primary-700 hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus-within:ring-primary-300 dark:focus-within:ring-primary-800 rounded-lg"
+			on:click={() => (hideAddSession = false)}>Adicionar Sessão!</button
+		>
+	</div>
+	<div class="flex flex-col md:flex-row justify-center flex-wrap items-center">
+		{#if $patient.sessions == null || $patient.sessions?.length === 0}
+			<p class="text-center p-1 mt-2">Nenhuma sessão!</p>
+		{:else}
+			{#each $patient.sessions as session}
+				<CardSession {session} />
+			{/each}
+		{/if}
+	</div>
 </section>
 
 <Drawer transitionType="fly" {transitionParams} bind:hidden={hideAddSession} id="sidebar3">

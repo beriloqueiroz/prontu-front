@@ -45,7 +45,7 @@
 </script>
 
 <form use:enhance={handler} method="POST" action="?/addSession">
-	<div class="grid gap-6 mb-6 md:grid-cols-2">
+	<div class="grid gap-6 mb-6">
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
 		<input type="hidden" value={[$patient?.id]} name="patientIds" id="patientIds" />
 		<div>
