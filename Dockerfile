@@ -11,8 +11,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ARG BASE_URL
+ARG PORT
 ARG ORIGIN
-RUN  HOST=$BASE_URL ORIGIN=$ORIGIN PORT=3000 npm run build
+RUN  HOST=$BASE_URL ORIGIN=$ORIGIN PORT=$PORT npm run build
 
 # Production image
 FROM node:16-alpine
@@ -29,7 +30,7 @@ COPY --from=builder --chown=sveltejs:nodejs /app/build ./
 
 USER sveltejs
 
-EXPOSE 3000
-ENV PORT 3000
+EXPOSE $PORT
+ENV PORT $PORT
 
 CMD ["node", "index.js"]
