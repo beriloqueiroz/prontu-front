@@ -8,7 +8,7 @@
 	export let patient: Patient;
 </script>
 
-<Card class="my-2 gap-2 flex flex-col relative">
+<Card class="my-2 gap-2 flex flex-col relative mx-2 w-full">
 	<div class="flex justify-between">
 		<div>
 			<h3 class="font-bold">{patient.name}</h3>
@@ -41,4 +41,5 @@
 		</div>
 	</div>
 	<Button on:click={() => goto(`/patient/${patient.id}`)}>Editar</Button>
+	<Button on:click={() => goto(`/patient/${patient.id}/sessions`)}>Sessões</Button>
 </Card>

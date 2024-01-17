@@ -87,3 +87,53 @@ export function isValidPassword(password: string): { success: boolean, errors: s
 export function currencyToNumber(currency: string): number {
   return Number(currency.replaceAll("R$ ", "").replaceAll(",00", ""));
 }
+
+export function isValidUuid(value: string) {
+  const regex = new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+  return (regex.test(value));
+}
+
+export function formatDateToBR(dateIn: Date | undefined | null | string) {
+  if (!dateIn) return ''
+
+  if (typeof dateIn == 'string') {
+    const firstSplittedDate = dateIn.split("-");
+    const year = firstSplittedDate[0];
+    if (year == '0000') return ''
+    const month = firstSplittedDate[1];
+    // const z = firstSplittedDate[3]
+    const secondSplittedDate = firstSplittedDate[2].split("T");
+    const day = secondSplittedDate[0];
+    const hourMinutes = secondSplittedDate[1];
+    return `${day}/${month}/${year} ${hourMinutes}`
+  }
+  return dateIn.toLocaleString('en-GB').replaceAll(",", "");
+}
+
+export function dateBrToIsoDate(dateBr: string): string {
+  const firstSplittedDate = dateBr.split("/");
+  const day = firstSplittedDate[0];
+  const month = firstSplittedDate[1];
+  const secondSplittedDate = firstSplittedDate[2].split(" ");
+  const year = secondSplittedDate[0];
+  const hourMinutes = secondSplittedDate[1];
+  const isoDate = `${year}-${month}-${day}T${hourMinutes}`;
+  return isoDate;
+}
+
+export function scapeJsonStringfy(myJSONString: string) {
+  return myJSONString.replace(/\\n/g, "\\n")
+    .replace(/\\'/g, "\\'")
+    .replace(/\\"/g, '\\"')
+    .replace(/\\&/g, "\\&")
+    .replace(/\\r/g, "\\r")
+    .replace(/\\t/g, "\\t")
+    .replace(/\\b/g, "\\b")
+    .replace(/\\f/g, "\\f");
+}
+
+export function jsonIsOk(text: string) {
+  return (/^[\],:{}\s]*$/.test(text.replace(/\\["\\\/bfnrtu]/g, '@').
+    replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+    replace(/(?:^|:|,)(?:\s*\[)+/g, '')));
+}

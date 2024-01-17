@@ -1,6 +1,14 @@
 # TODO list
 
-- melhorar indicativo de erro nos campos de formulário
+- endpoints sessão
+  - insert
+    - by patient (unique patientId)
+    - by professional (multiples patientId)
+  - update
+    - by patient (only add patient, not remove original, can remove others)
+    - by professional (only add patient, not remove original)
+  - remove
+
 - dashboard do profissional
   - quantidade de pacientes ativos
   - quantidade de pacientes desativados

@@ -4,7 +4,7 @@ import { decodeToken } from "$lib/server/helper";
 import type { Handle } from '@sveltejs/kit';
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
-    if (event.url.pathname.startsWith('/api/professional')) {
+    if (event.url.pathname.startsWith('?')) {//todo filtrar
         const token = event.cookies.get("AuthorizationToken");
 
         if (!token) {

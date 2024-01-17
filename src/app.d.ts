@@ -28,4 +28,3 @@ export interface DefaultError {
 
 export type PageServerLoad = Kit.ServerLoad<RouteParams>;
 export type PageLoad = Kit.Load<RouteParams>;
-

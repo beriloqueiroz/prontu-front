@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { Patient } from '$lib/interface/professional/patient';
-
-	export let patient: Patient;
 	import { Input, Label, Button, Select } from 'flowbite-svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import Spinner from '$lib/components/Spinner.svelte';
@@ -20,15 +17,16 @@
 	} from '$lib/interface/professional/enums/paymentType';
 	import InputCurrency from '$lib/components/InputCurrency.svelte';
 	import { clearFormError, processFormError } from '$lib/helpers/forms';
+	import { patient } from '$lib/stores/patient';
 
 	let error: string | null = null;
 	let loading = false;
-	let sessionType_selected = patient.financialInfo?.sessionType;
+	let sessionType_selected = $patient.financialInfo?.sessionType;
 	let sessionTypes = allSessionTypes.map((st) => ({
 		value: st,
 		name: getSessionTypeKey(st)
 	}));
-	let paymentType_selected = patient.financialInfo?.paymentType;
+	let paymentType_selected = $patient.financialInfo?.paymentType;
 	$: isPerSession = paymentType_selected == PaymentType['POR SESSÃO'];
 	let paymentTypes = allPaymentTypes.map((st) => ({
 		value: st,
@@ -50,8 +48,8 @@
 			}
 			loading = false;
 			successMessage = 'Sucesso ao editar paciente!';
-			patient = result.data;
-			professional.changePatient(patient);
+			patient.set(result.data);
+			professional.changePatient($patient);
 			await applyAction(result);
 		};
 	}
@@ -60,15 +58,15 @@
 <form use:enhance={handleEdit} method="POST" action="?/editFinancial">
 	<div class="grid gap-6 mb-6 md:grid-cols-2">
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
-		<input type="hidden" value={patient.id} name="id" id="id" />
+		<input type="hidden" value={$patient.id} name="id" id="id" />
 		<div>
 			<Label for="defaultSessionPrice" class="mb-2">Valor padrão da sessão</Label>
 			<InputCurrency
 				id="defaultSessionPrice"
 				required
-				placeholder="R$ 150,00"
+				placeholder="R$ 150"
 				name="defaultSessionPrice"
-				value={patient.financialInfo?.defaultSessionPrice?.toFixed(2).replaceAll('.', ',')}
+				value={$patient.financialInfo?.defaultSessionPrice.toString()}
 			/>
 		</div>
 		<div>
@@ -77,7 +75,7 @@
 				type="number"
 				id="estimatedSessionsByWeek"
 				name="estimatedSessionsByWeek"
-				value={patient.financialInfo?.estimatedSessionsByWeek}
+				value={$patient.financialInfo?.estimatedSessionsByWeek}
 			/>
 		</div>
 		<div>
@@ -88,7 +86,7 @@
 				type="number"
 				id="estimatedTimeSessionInMinutes"
 				name="estimatedTimeSessionInMinutes"
-				value={patient.financialInfo?.estimatedTimeSessionInMinutes}
+				value={$patient.financialInfo?.estimatedTimeSessionInMinutes}
 			/>
 		</div>
 		<div>
@@ -112,7 +110,7 @@
 					type="number"
 					id="paymentPeriodInDays"
 					name="paymentPeriodInDays"
-					value={patient.financialInfo?.paymentPeriodInDays || 2}
+					value={$patient.financialInfo?.paymentPeriodInDays || 2}
 				/>
 			</div>
 			<div>
@@ -123,7 +121,7 @@
 					type="number"
 					id="sessionQuantityPerPayment"
 					name="sessionQuantityPerPayment"
-					value={patient.financialInfo?.sessionQuantityPerPayment || 2}
+					value={$patient.financialInfo?.sessionQuantityPerPayment || 2}
 				/>
 			</div>
 		{:else}

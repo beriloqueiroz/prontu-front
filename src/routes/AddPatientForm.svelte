@@ -15,7 +15,7 @@
 
 	let successMessage: string | null = null;
 
-	async function handleRegister() {
+	async function handle() {
 		loading = true;
 		successMessage = null;
 		error = null;
@@ -40,8 +40,8 @@
 	}
 </script>
 
-<form use:enhance={handleRegister} method="POST" action="?/addPatient">
-	<div class="grid gap-6 mb-6 md:grid-cols-2">
+<form use:enhance={handle} method="POST" action="?/addPatient">
+	<div class="grid gap-6 mb-6">
 		<input type="hidden" value={$professional?.id} name="professionalId" id="professionalId" />
 		<div>
 			<Label for="name" class="mb-2">Nome completo</Label>

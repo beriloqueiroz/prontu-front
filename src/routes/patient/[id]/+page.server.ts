@@ -1,5 +1,4 @@
 import { error, type Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from '../../../app';
 import { http } from '$lib/server/http/server';
 import { URL_BASE_BACKEND } from '$env/static/private';
 import type { Phone } from '$lib/interface/professional/patient';
@@ -7,36 +6,6 @@ import { z } from 'zod';
 import { currencyToNumber, isValidCPF } from '$lib/helpers';
 import { allSessionTypes } from '$lib/interface/professional/enums/sessionType';
 import { allPaymentTypes } from '$lib/interface/professional/enums/paymentType';
-
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ params, locals, cookies }: PageServerLoad) {
-  const professionalId = locals.user?.username;
-  if (!professionalId) {
-    throw error(401, { message: "Erro ao buscar paciente" });
-  }
-  const regex = new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
-  if (!regex.test(params.id)) {
-    throw error(404, { message: "Erro ao buscar paciente" });
-  }
-  const patientResponse = await http.request(`${URL_BASE_BACKEND}/professional/${professionalId}/${params.id}`, {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-      Authorization: `Bearer ${cookies.get("AuthorizationToken")}`
-    }
-  });
-
-  if (!patientResponse.ok) {
-    const errors = await patientResponse.json();
-    throw error(patientResponse.status, {
-      message: errors.title
-    });
-  }
-
-  const response = await patientResponse.json();
-
-  return { patient: response };
-}
 
 const editPatientGeneralSchema = z.object({
   name: z.string().trim().min(3, { message: "Email deve conter mais do que 3 caracteres" }),
@@ -48,7 +17,6 @@ const editPatientGeneralSchema = z.object({
   chatPhone: z.string().min(15, { message: "Whatsapp inválido" }),
   isActive: z.coerce.boolean()
 });
-
 
 const editPatientFinancialSchema = z.object({
   id: z.string().uuid(),

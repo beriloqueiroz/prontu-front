@@ -24,5 +24,6 @@ export const DELETE: RequestHandler = async ({ cookies }): Promise<Response> => 
         sameSite: 'strict',
         maxAge: 0
     });
+
     return new Response(await response.text());
 }

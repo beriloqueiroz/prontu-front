@@ -1,3 +1,4 @@
+import type { Session } from "../session/session";
 import type { Patient } from "./patient";
 
 export interface Professional {
@@ -7,7 +8,8 @@ export interface Professional {
   professionalDocument: string,
   professionalDocumentInstitution: string,
   email: string,
-  patients: Patient[]
+  patients: Patient[],
+  sessions: Session[]
 }
 
 export type ProfessionalRecord = Record<
