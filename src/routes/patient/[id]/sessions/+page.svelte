@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { patient } from '$lib/stores/patient.js';
-	import { Button, CloseButton, Drawer } from 'flowbite-svelte';
+	import { CloseButton, Drawer } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import AddSessionForm from './AddSessionForm.svelte';
 	import CardSession from '$lib/components/CardSession.svelte';

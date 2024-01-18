@@ -6,12 +6,13 @@ import { http } from '$lib/server/http/server';
 import { URL_BASE_BACKEND } from '$env/static/private';
 
 export async function load({ cookies, url, locals }: PageServerLoad) {
-  if (locals.user == null) {
+  if (cookies.get("AuthorizationToken") != null && cookies.get("AuthorizationToken") !== '') {
     const token = cookies.get("AuthorizationToken");
     if (
       (!token || token === '') &&
       !url.pathname.includes('/login') &&
-      !url.pathname.includes('/register')
+      !url.pathname.includes('/register') &&
+      !url.pathname.includes('/User')
     ) {
       throw redirect(307, '/login');
     }
