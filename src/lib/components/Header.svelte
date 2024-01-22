@@ -22,8 +22,8 @@
 		<NavBrand href="/">{$professional?.name || ''}</NavBrand>
 		<NavHamburger onClick={general.toggleMenu} />
 		<NavUl hidden={!$general?.showMenu}>
-			<NavLi href="/">Inicio</NavLi>
 			{#if $user}
+				<NavLi href="/">Inicio</NavLi>
 				<NavLi class="cursor-pointer" on:click={() => goto('/professional')}
 					>Minhas informações</NavLi
 				>

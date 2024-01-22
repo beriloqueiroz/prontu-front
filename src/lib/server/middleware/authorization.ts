@@ -4,10 +4,15 @@ import { decodeToken } from "$lib/server/helper";
 import type { Handle } from '@sveltejs/kit';
 
 export const authorizationMiddleware: Handle = async ({ event, resolve }): Promise<Response> => {
+    if (event.url.pathname === "/") {
+        event.locals.user = null
+        return await resolve(event);
+    }
+
     if (!event.url.pathname.startsWith('/login') &&
         !event.url.pathname.startsWith('/register') &&
         !event.url.pathname.startsWith('/User')
-    ) {//todo filtrar
+    ) {
         const token = event.cookies.get("AuthorizationToken");
 
         if (!token) {
@@ -34,6 +39,7 @@ export const authorizationMiddleware: Handle = async ({ event, resolve }): Promi
         }
 
         event.locals.user = decodeToken(token);
+        console.log("🚀 ~ constauthorizationMiddleware:Handle= ~ event.locals.user:", event.locals.user)
     }
 
     return await resolve(event);

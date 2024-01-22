@@ -7,7 +7,16 @@
 	import type { User } from '$lib/interface/user/user';
 	import { professional } from '$lib/stores/professional';
 	import { user } from '$lib/stores/user';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	export let data: { user: User; professional: Professional };
+
+	onMount(() => {
+		if (!data?.user) {
+			goto('/login');
+		}
+	});
+
 	$: user.set(data.user);
 	$: professional.set(data.professional);
 </script>
