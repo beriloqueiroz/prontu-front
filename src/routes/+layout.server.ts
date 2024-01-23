@@ -6,7 +6,10 @@ import { http } from '$lib/server/http/server';
 import { URL_BASE_BACKEND } from '$env/static/private';
 
 export async function load({ cookies, url, locals }: PageServerLoad) {
-  if (cookies.get("AuthorizationToken") != null && cookies.get("AuthorizationToken") !== '') {
+  if (url.pathname.includes('/User')) {
+    return { redirectToLogin: false };
+  }
+  if (!!cookies.get("AuthorizationToken") && cookies.get("AuthorizationToken") !== '') {
     const token = cookies.get("AuthorizationToken");
     if (
       (!token || token === '') &&
@@ -17,18 +20,13 @@ export async function load({ cookies, url, locals }: PageServerLoad) {
       throw redirect(307, '/login');
     }
     let user = null;
-    let redirectToLogin = true;
-
-    if (url.pathname.includes('/User')) {
-      redirectToLogin = false;
-    }
 
     try {
       user = decodeToken(token);
     } catch (error) {
       cookies.delete("AuthorizationToken");
       locals.user = null;
-      return { redirectToLogin };
+      return { redirectToLogin: true };
     }
 
     if (token && !url.pathname.includes('/login') &&
@@ -37,10 +35,9 @@ export async function load({ cookies, url, locals }: PageServerLoad) {
 
       const professional = await getProfessional(user.username);
 
-      return { user, professional, redirectToLogin };
+      return { user, professional, redirectToLogin: false };
     }
   }
-
   return { redirectToLogin: true };
 }
 
