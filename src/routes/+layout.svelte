@@ -9,10 +9,10 @@
 	import { user } from '$lib/stores/user';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	export let data: { user: User; professional: Professional };
+	export let data: { user: User; professional: Professional; redirectToLogin: boolean };
 
 	onMount(() => {
-		if (!data?.user) {
+		if (data?.redirectToLogin) {
 			goto('/login');
 		}
 	});

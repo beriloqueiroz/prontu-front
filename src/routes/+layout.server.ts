@@ -17,13 +17,18 @@ export async function load({ cookies, url, locals }: PageServerLoad) {
       throw redirect(307, '/login');
     }
     let user = null;
+    let redirectToLogin = true;
+
+    if (url.pathname.includes('/User')) {
+      redirectToLogin = false;
+    }
 
     try {
       user = decodeToken(token);
     } catch (error) {
       cookies.delete("AuthorizationToken");
       locals.user = null;
-      return {};
+      return { redirectToLogin };
     }
 
     if (token && !url.pathname.includes('/login') &&
@@ -32,11 +37,11 @@ export async function load({ cookies, url, locals }: PageServerLoad) {
 
       const professional = await getProfessional(user.username);
 
-      return { user, professional };
+      return { user, professional, redirectToLogin };
     }
   }
 
-  return {};
+  return { redirectToLogin: true };
 }
 
 async function getProfessional(id: string): Promise<Professional> {

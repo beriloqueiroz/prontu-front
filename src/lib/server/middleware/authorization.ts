@@ -39,7 +39,6 @@ export const authorizationMiddleware: Handle = async ({ event, resolve }): Promi
         }
 
         event.locals.user = decodeToken(token);
-        console.log("🚀 ~ constauthorizationMiddleware:Handle= ~ event.locals.user:", event.locals.user)
     }
 
     return await resolve(event);
