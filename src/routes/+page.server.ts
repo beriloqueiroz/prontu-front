@@ -8,11 +8,11 @@ import { z } from 'zod';
 
 const addPatientSchema = z.object({
   name: z.string().trim().min(3, { message: "Email deve conter mais do que 3 caracteres" }),
-  email: z.string().trim().email({ message: "Email inválido" }).min(1),
+  email: z.string().trim().nullable(),
   professionalId: z.string().uuid(),
   document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
-  phone: z.string().min(15, { message: "Telefone inválido" }),
-  chatPhone: z.string().min(15, { message: "Whatsapp inválido" }),
+  phone: z.string().nullable(),
+  chatPhone: z.string().nullable(),
 });
 
 const addSessionSchema = z.object({
@@ -82,11 +82,11 @@ export const actions: Actions = {
     const phones: Phone[] = [
       {
         isChat: true,
-        value: chatPhone
+        value: chatPhone ?? ""
       },
       {
         isChat: false,
-        value: phone
+        value: phone ?? ""
       }
     ]
 

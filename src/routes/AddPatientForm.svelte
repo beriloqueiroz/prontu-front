@@ -62,7 +62,7 @@
 	</div>
 	<div class="mb-6">
 		<Label for="email" class="mb-2">Email</Label>
-		<Input type="email" id="email" placeholder="john.doe@company.com" required name="email" />
+		<Input type="email" id="email" placeholder="john.doe@company.com" name="email" />
 	</div>
 	<Button type="submit">
 		{#if loading}
