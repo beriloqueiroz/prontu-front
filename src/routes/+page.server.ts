@@ -10,7 +10,8 @@ const addPatientSchema = z.object({
   name: z.string().trim().min(3, { message: "Email deve conter mais do que 3 caracteres" }),
   email: z.string().trim().nullable(),
   professionalId: z.string().uuid(),
-  document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
+  document: z.string().nullable(),
+  // document: z.custom((val) => typeof val === "string" ? isValidCPF(val) : false, { message: "CPF inválido!" }),
   phone: z.string().nullable(),
   chatPhone: z.string().nullable(),
 });
