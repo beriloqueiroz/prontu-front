@@ -49,7 +49,7 @@
 		</div>
 		<div>
 			<Label for="document" class="mb-2">Cpf</Label>
-			<InputDocument id="document" required name="document" />
+			<InputDocument id="document" name="document" />
 		</div>
 		<div>
 			<Label for="phone" class="mb-2">Telefone</Label>
