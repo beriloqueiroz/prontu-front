@@ -1,5 +1,5 @@
 import { URL_BASE_BACKEND, URL_BASE_SESSION } from '$env/static/private';
-import { currencyToNumber, dateBrToIsoDate, isValidCPF } from '$lib/helpers';
+import { currencyToNumber, dateBrToIsoDate } from '$lib/helpers';
 import type { Phone } from '$lib/interface/professional/patient';
 import type { Session } from '$lib/interface/session/session';
 import { http } from '$lib/server/http/server';
@@ -78,7 +78,7 @@ export const actions: Actions = {
 
     const { name, document, email, professionalId, phone, chatPhone } = {
       ...zodResponse.data,
-      document: zodResponse.data.document.replaceAll(".", "").replaceAll("-", "")
+      document: zodResponse.data.document?.replaceAll(".", "").replaceAll("-", "")
     }
     const phones: Phone[] = [
       {
