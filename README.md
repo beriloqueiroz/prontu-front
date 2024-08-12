@@ -1,6 +1,7 @@
 # Prontu Front
 
-- feito com bunjs (concorrente do nodejs) + svelte (concorrente do react), decisão com grande probabilidade de ser a errada, mas dev é bixo doido.
+- Um projeto cujo objetivo é fazer a gestão dos pacientes, cujo back está em outro repositório, (prontu).
+- feito com bunjs (concorrente do nodejs) + svelte (concorrente do react).
 
 ## Para rodar
 
